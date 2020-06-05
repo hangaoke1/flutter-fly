@@ -1,6 +1,6 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
-import 'package:hello_world/router/application.dart';
+import 'package:flutter_fly/router/application.dart';
 
 class Movie extends StatefulWidget {
   Movie({Key key}) : super(key: key);

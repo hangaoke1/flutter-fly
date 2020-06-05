@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hello_world/pages/home/comic/index.dart';
-import 'package:hello_world/pages/home/movie/index.dart';
-import 'package:hello_world/pages/home/story/index.dart';
+import 'package:flutter_fly/pages/home/comic/index.dart';
+import 'package:flutter_fly/pages/home/movie/index.dart';
+import 'package:flutter_fly/pages/home/story/index.dart';
 
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);

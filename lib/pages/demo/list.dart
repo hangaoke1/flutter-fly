@@ -9,8 +9,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:dio/dio.dart';
 
-import 'package:hello_world/api/index.dart';
-import 'package:hello_world/model/order.dart';
+import 'package:flutter_fly/api/index.dart';
+import 'package:flutter_fly/model/order.dart';
 import 'list_item.dart';
 
 class ListWrap extends StatefulWidget {

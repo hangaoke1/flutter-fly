@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hello_world/pages/demo/tab_bar.dart';
-import 'package:hello_world/pages/test/banner.dart';
+import 'package:flutter_fly/pages/demo/tab_bar.dart';
+import 'package:flutter_fly/pages/test/banner.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
 

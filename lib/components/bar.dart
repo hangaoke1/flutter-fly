@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hello_world/utils/eventbus.dart';
+import 'package:flutter_fly/utils/eventbus.dart';
 
 typedef ItemBuilder<T> = T Function(T item);
 int first(int ts) {

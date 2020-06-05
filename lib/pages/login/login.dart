@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-import 'package:hello_world/storage/index.dart';
+import 'package:flutter_fly/storage/index.dart';
 
-import 'package:hello_world/router/application.dart';
+import 'package:flutter_fly/router/application.dart';
 
 class Login extends StatefulWidget {
   const Login();

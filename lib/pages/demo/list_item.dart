@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hello_world/model/order.dart';
+import 'package:flutter_fly/model/order.dart';
 
 class ListItem extends StatelessWidget {
 

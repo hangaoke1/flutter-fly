@@ -1,10 +1,9 @@
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
-import 'package:hello_world/pages/user/user.dart';
-import 'package:hello_world/pages/home/index.dart';
-import 'package:hello_world/pages/hot/index.dart';
-import 'package:hello_world/pages/test/index.dart';
+import 'package:flutter_fly/pages/user/user.dart';
+import 'package:flutter_fly/pages/home/index.dart';
+import 'package:flutter_fly/pages/hot/index.dart';
+import 'package:flutter_fly/pages/test/index.dart';
 
 class Root extends StatefulWidget {
   Root({Key key}) : super(key: key);

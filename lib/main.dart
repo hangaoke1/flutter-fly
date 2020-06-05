@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hello_world/app.dart';
+import 'package:flutter_fly/app.dart';
 
-import 'package:hello_world/api/index.dart';
-import 'package:hello_world/api/interceptor.dart';
-import 'package:hello_world/storage/index.dart';
+import 'package:flutter_fly/api/index.dart';
+import 'package:flutter_fly/api/interceptor.dart';
+import 'package:flutter_fly/storage/index.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hello_world/router/application.dart';
+import 'package:flutter_fly/router/application.dart';
 
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
-// import 'package:hello_world/router/route_animate.dart';
+// import 'package:flutter_fly/router/route_animate.dart';
 
 class Comic extends StatefulWidget {
   Comic({Key key}) : super(key: key);
