@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world/model/order.dart';
 
 class ListItem extends StatelessWidget {
 
   const ListItem({Key key, this.item}) : super(key: key);
 
-  final String item;
+  final Order item;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class ListItem extends StatelessWidget {
             child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('订单'),
+              Text('订单编号: ${item.id.toString()}'),
               Text('未发货')
             ],
           ),
@@ -32,7 +33,7 @@ class ListItem extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('小红'+item),
+              Text('¥ ${item.price.toStringAsFixed(2)}'),
               Text('已付款')
             ],
           )

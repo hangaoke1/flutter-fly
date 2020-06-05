@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -7,21 +6,24 @@ import 'package:flutter_easyrefresh/ball_pulse_header.dart';
 import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import 'package:dio/dio.dart';
 
-import 'package:hello_world/api/index.dart';
-import 'package:hello_world/model/order.dart';
-import 'list_item.dart';
+typedef LoadCallback = Future<dynamic> Function(int pageNo, int pageSize);
 
-class ListWrap extends StatefulWidget {
-  ListWrap({Key key}) : super(key: key);
+typedef ItemBuilder<T> = Widget Function(T item);
 
-  _ListWrapState createState() => _ListWrapState();
+class ListWrap<Item> extends StatefulWidget {
+
+  ListWrap({Key key, this.onLoad, this.itemBuilder}) : super(key: key);
+
+  final LoadCallback onLoad;
+
+  final ItemBuilder<Item> itemBuilder;
+
+  _ListWrapState createState() => _ListWrapState<Item>();
 }
 
-class _ListWrapState extends State<ListWrap>
-    with AutomaticKeepAliveClientMixin {
-  List<Order> list = [];
+class _ListWrapState<Item> extends State<ListWrap> with AutomaticKeepAliveClientMixin {
+  List<Item> list = [];
   EasyRefreshController _controller;
   int pageNo = 1;
   int pageSize = 10;
@@ -36,28 +38,22 @@ class _ListWrapState extends State<ListWrap>
     _controller = EasyRefreshController();
   }
 
-  Future<dynamic> _load() async {
+  Future<List<Item>> _load() async {
     print('分页参数 $pageNo $pageSize');
-    Response response =
-        await dio.get("http://110.80.137.93:3000/mock/200/order/list");
-    String jsonStr = json.encode(response.data);
-    Map<String, dynamic> jsonObj = json.decode(jsonStr);
-    List resData = jsonObj['data'];
-    List<Order> orderList = [];
-    resData.forEach((data) {
-      orderList.add(Order.fromJson(data));
-    });
+    List<Item> list = await widget.onLoad(pageNo, pageSize);
     pageNo += 1;
-    return orderList;
+    return list;
   }
 
   Future<void> _handleRefresh() async {
     pageNo = 1;
     await Future.delayed(Duration(milliseconds: 1000));
-    List<Order> orderList = await _load();
-    setState(() {
-      list = orderList;
-    });
+    List<Item> orderList = await _load();
+    if (mounted) {
+      setState(() {
+        list = orderList;
+      });
+    }
     Fluttertoast.showToast(
         msg: "刷新完成",
         toastLength: Toast.LENGTH_SHORT,
@@ -72,11 +68,11 @@ class _ListWrapState extends State<ListWrap>
 
   Future<void> _handleLoad() async {
     await Future.delayed(Duration(milliseconds: 1000));
-    List<Order> orderList = await _load();
+    List<Item> orderList = await _load();
     setState(() {
       list.addAll(orderList);
     });
-    _controller.finishLoad(noMore: list.length >= 30);
+    _controller.finishLoad(noMore: orderList.length < pageSize);
   }
 
   @override
@@ -89,8 +85,12 @@ class _ListWrapState extends State<ListWrap>
         size: 40.0,
       ),
       controller: _controller,
-      header: BallPulseHeader(),
-      footer: BallPulseFooter(),
+      header: BallPulseHeader(
+        color: Theme.of(context).primaryColor
+      ),
+      footer: BallPulseFooter(
+        color: Theme.of(context).primaryColor
+      ),
       onRefresh: _handleRefresh,
       onLoad: _handleLoad,
       scrollController: ScrollController(),
@@ -98,8 +98,8 @@ class _ListWrapState extends State<ListWrap>
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              final Order item = list[index];
-              return ListItem(item: item);
+              final Item item = list[index];
+              return widget.itemBuilder(item);
             },
             childCount: list.length,
           ),

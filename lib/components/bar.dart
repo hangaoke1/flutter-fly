@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/utils/eventbus.dart';
 
+typedef ItemBuilder<T> = T Function(T item);
+int first(int ts) {
+  return ts;
+}
+
+// ItemBuilder<String> a = first;
+
 class Bar extends StatefulWidget {
   Bar({Key key}) : super(key: key);
 

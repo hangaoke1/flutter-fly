@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'banner.dart';
 
 // 视差滚动
@@ -17,8 +15,6 @@ class _TestState extends State<Test> {
       physics: ClampingScrollPhysics(),
       slivers: <Widget>[
         SliverPersistentHeader(
-          // pinned: true, // 顶部固定
-          // floating: true, // 下拉后立即开始显示
           delegate: DemoHeader(
               text: '足球', color: Colors.red, img: 'images/dm1@2x.png'),
         ),

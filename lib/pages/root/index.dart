@@ -1,8 +1,9 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+
+import 'package:hello_world/pages/user/user.dart';
 import 'package:hello_world/pages/home/index.dart';
 import 'package:hello_world/pages/hot/index.dart';
-import 'package:hello_world/pages/user/index.dart';
 import 'package:hello_world/pages/test/index.dart';
 
 class Root extends StatefulWidget {
@@ -14,25 +15,26 @@ class Root extends StatefulWidget {
 class _RootState extends State<Root> {
   int _tabIndex = 0;
   GlobalKey _bottomNavigationKey = GlobalKey();
-  
+
   Future<bool> _onWillPop() {
     return showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        title: new Text('提示'),
-        content: new Text('客官，确定退出app?'),
-        actions: <Widget>[
-          new FlatButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: new Text('放弃'),
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('提示'),
+            content: new Text('客官，确定退出app?'),
+            actions: <Widget>[
+              new FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: new Text('放弃'),
+              ),
+              new FlatButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: new Text('退出'),
+              ),
+            ],
           ),
-          new FlatButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: new Text('退出'),
-          ),
-        ],
-      ),
-    ) ?? false;
+        ) ??
+        false;
   }
 
   void _onItemTapped(int index) {
@@ -55,16 +57,32 @@ class _RootState extends State<Root> {
           ],
           index: _tabIndex,
         ),
-        bottomNavigationBar: CurvedNavigationBar( // 底部导航
+        bottomNavigationBar: BottomNavigationBar(
           key: _bottomNavigationKey,
-          items: <Widget  >[
-            Icon(Icons.list, size: 30),
-            Icon(Icons.home, size: 30),
-            Icon(Icons.business, size: 30),
-            Icon(Icons.school, size: 30)
-          ],
           onTap: _onItemTapped,
+          currentIndex: _tabIndex,
+          type: BottomNavigationBarType.fixed,
+          items: [
+            new BottomNavigationBarItem(
+                icon: Icon(Icons.home, size: 30), title: Text('首页')),
+            new BottomNavigationBarItem(
+                icon: Icon(Icons.view_list, size: 30), title: Text('列表')),
+            new BottomNavigationBarItem(
+                icon: Icon(Icons.favorite, size: 30), title: Text('测试')),
+            new BottomNavigationBarItem(
+                icon: Icon(Icons.account_circle, size: 30), title: Text('个人中心')),
+          ],
         ),
+        // bottomNavigationBar: CurvedNavigationBar( // 底部导航
+        //   key: _bottomNavigationKey,
+        //   items: <Widget  >[
+        //     Icon(Icons.list, size: 30),
+        //     Icon(Icons.home, size: 30),
+        //     Icon(Icons.business, size: 30),
+        //     Icon(Icons.school, size: 30)
+        //   ],
+        //   onTap: _onItemTapped,
+        // ),
       ),
     );
   }

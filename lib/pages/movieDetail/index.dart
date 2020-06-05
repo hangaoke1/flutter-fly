@@ -17,7 +17,10 @@ class _MovieDetailState extends State<MovieDetail> {
   void initState() {
     id = widget.id;
     super.initState();
-    print('hello 韩高钶');
+  }
+
+  _handleClick() {
+    Navigator.of(context).popUntil(ModalRoute.withName('/'));
   }
 
   @override
@@ -26,7 +29,10 @@ class _MovieDetailState extends State<MovieDetail> {
       appBar: AppBar(title: Text('电影详情'), elevation: 0.5),
       body: Center(
         child: Container(
-          child: Text('电影' + id),
+          child: RaisedButton(
+            child: Text('电影' + id.toString()),
+            onPressed: _handleClick,
+          ),
         ),
       ),
     );

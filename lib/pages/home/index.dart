@@ -24,15 +24,17 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     return Container(
       child: Scaffold(
         appBar: AppBar(
+          leading: null,
           title: Container(
-            height: 40,
             alignment: Alignment.center,
             padding: EdgeInsets.symmetric(horizontal: 25),
             child: TabBar(
+              indicatorColor: Colors.orange,
+              indicatorWeight: 4,
               controller: _tabController,
               tabs: tabs.map((e) => Tab(text: e)).toList(),
               indicatorSize: TabBarIndicatorSize.label,
-              labelStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.w500)),
+              labelStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
           )
         ),
         body: TabBarView(

@@ -20,15 +20,15 @@ class AppComponentState extends State<AppComponent> {
 
   @override
   Widget build(BuildContext context) {
+    
     final app = MaterialApp(
       title: 'Fluro',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Colors.pink[300],
       ),
       onGenerateRoute: Application.router.generator,
     );
-//    print("initial route = ${app.initialRoute}");
     return app;
   }
 }
