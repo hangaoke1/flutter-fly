@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fly/storage/index.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter_fly/router/application.dart';
+
 class User extends StatefulWidget {
   User({Key key}) : super(key: key);
 
   _UserState createState() => _UserState();
 }
 
-
 class _UserState extends State<User> {
-
   _logout() {
     SpUtil.preferences.setString('TOKEN', null);
     Application.router.navigateTo(context, '/login', clearStack: true);
@@ -71,10 +71,12 @@ class _UserState extends State<User> {
         ...listWidget,
         Center(
           child: Container(
-            width: 350,
-            margin: EdgeInsets.only(top: 20),
+            width: ScreenUtil().setWidth(500),
+            margin: EdgeInsets.only(top: ScreenUtil().setWidth(40)),
             child: RaisedButton(
-              padding: EdgeInsets.only(top: 15, bottom: 15),
+              padding: EdgeInsets.only(
+                  top: ScreenUtil().setWidth(20),
+                  bottom: ScreenUtil().setWidth(20)),
               color: Color(0xFFf5222d),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),

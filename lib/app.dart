@@ -1,6 +1,6 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
-
+import 'package:bot_toast/bot_toast.dart';
 import './router/application.dart';
 import './router/routes.dart';
 
@@ -20,9 +20,10 @@ class AppComponentState extends State<AppComponent> {
 
   @override
   Widget build(BuildContext context) {
-    
     final app = MaterialApp(
       title: 'Fluro',
+      builder: BotToastInit(),
+      navigatorObservers: [BotToastNavigatorObserver()],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Colors.pink[300],

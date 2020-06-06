@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter_fly/pages/user/user.dart';
 import 'package:flutter_fly/pages/home/index.dart';
@@ -44,6 +45,7 @@ class _RootState extends State<Root> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, width: 750, height: 1334);
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
