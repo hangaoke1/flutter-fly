@@ -37,6 +37,9 @@ dependencies:
   cupertino_icons: ^0.1.2
 
 dev_dependencies:
+  json_model: #latest version
+  build_runner: ^1.0.0
+  json_serializable: ^2.0.0
   flutter_test:
     sdk: flutter
 

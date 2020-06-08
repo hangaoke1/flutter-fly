@@ -1,8 +1,14 @@
 # flutter_fly
 
-A new Flutter project.
+一个简单的flutter练手项目
 
-## Getting Started
+## 常用命令
+1. 工具生成model
+```
+flutter packages pub run json_model
+```
+
+## 快速开始
 
 This project is a starting point for a Flutter application.
 
