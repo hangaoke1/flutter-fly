@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/ball_pulse_header.dart';
 import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
@@ -54,14 +54,6 @@ class _ListWrapState<Item> extends State<ListWrap> with AutomaticKeepAliveClient
         list = orderList;
       });
     }
-    Fluttertoast.showToast(
-        msg: "刷新完成",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIos: 1,
-        backgroundColor: const Color(0x80000000),
-        textColor: Colors.white,
-        fontSize: 16.0);
     _controller.resetLoadState();
     _controller.finishRefresh();
   }

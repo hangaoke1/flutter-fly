@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fly/app.dart';
+import 'package:flutter_fly/provider/user.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter_fly/pages/user/user.dart';
@@ -6,15 +8,52 @@ import 'package:flutter_fly/pages/home/index.dart';
 import 'package:flutter_fly/pages/hot/index.dart';
 import 'package:flutter_fly/pages/test/index.dart';
 
+import 'package:provider/provider.dart';
 class Root extends StatefulWidget {
   Root({Key key}) : super(key: key);
 
   _RootState createState() => _RootState();
 }
 
-class _RootState extends State<Root> {
+class _RootState extends State<Root> with RouteAware {
   int _tabIndex = 0;
   GlobalKey _bottomNavigationKey = GlobalKey();
+
+  @override
+  void didChangeDependencies() {
+    AppComponent.routeObserver.subscribe(this, ModalRoute.of(context)); //订阅
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    AppComponent.routeObserver.unsubscribe(this); //取消订阅
+    super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    // 返回页面
+    print('返回NewView');
+  }
+
+  @override
+  void didPush() async{
+    // 首次进入
+    await context.read<UserProvider>().setUser();
+    print('进入NewView');
+  }
+
+  @override
+  void didPushNext() {
+    // 离开页面
+    print('>>> didPushNext');
+  }
+
+  @override
+  void didPop() {
+    print('>>> didPop');
+  }
 
   Future<bool> _onWillPop() {
     return showDialog(
@@ -71,7 +110,8 @@ class _RootState extends State<Root> {
             new BottomNavigationBarItem(
                 icon: Icon(Icons.favorite, size: 30), title: Text('测试')),
             new BottomNavigationBarItem(
-                icon: Icon(Icons.account_circle, size: 30), title: Text('个人中心')),
+                icon: Icon(Icons.account_circle, size: 30),
+                title: Text('个人中心')),
           ],
         ),
         // bottomNavigationBar: CurvedNavigationBar( // 底部导航

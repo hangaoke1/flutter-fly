@@ -42,8 +42,7 @@ class _ComicState extends State<Comic> {
                   alignment: Alignment.center,
                   child: Text('tab2列表', style: TextStyle(fontSize: 22))),
               onTap: () {
-                Application.router.navigateTo(context, '/tabList2Demo',
-                    transition: TransitionType.cupertino);
+                Application.router.navigateTo(context, '/tabList2Demo');
               })
         ],
       ),

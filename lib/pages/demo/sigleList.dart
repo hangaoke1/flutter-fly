@@ -19,11 +19,16 @@ class _SingleListDemoState extends State<SingleListDemo> {
     super.initState();
   }
 
+  @override
+  void deactivate() {
+    print('list页面切换==========');
+    super.deactivate();
+  }
+
   Future<dynamic> _load(int pageNo, int pageSize) async {
-    print('分页参数 $pageNo $pageSize');
     List<Order> orderList = await orderApi.queryOrderList({
-      pageNo: pageNo,
-      pageSize: pageSize
+      "pageNo": pageNo,
+      "pageSize": pageSize
     });
     return orderList;
   }

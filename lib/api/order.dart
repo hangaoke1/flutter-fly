@@ -7,7 +7,7 @@ import './index.dart';
 Future queryOrderList(dynamic params) async {
   print('>>> 请求参数$params');
    Response response =
-        await dio.get("http://110.80.137.93:3000/mock/200/order/list");
+        await dio.get("/order/list", queryParameters: params);
     String jsonStr = json.encode(response.data);
     Map<String, dynamic> jsonObj = json.decode(jsonStr);
     OrderListHttp result = OrderListHttp.fromJson(jsonObj);

@@ -5,6 +5,7 @@ import './router/application.dart';
 import './router/routes.dart';
 
 class AppComponent extends StatefulWidget {
+  static final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
   @override
   State createState() {
     return AppComponentState();
@@ -23,10 +24,12 @@ class AppComponentState extends State<AppComponent> {
     final app = MaterialApp(
       title: 'Fluro',
       builder: BotToastInit(),
-      navigatorObservers: [BotToastNavigatorObserver()],
+      navigatorKey: Application.navigatorKey,
+      navigatorObservers: [BotToastNavigatorObserver(), AppComponent.routeObserver],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Colors.pink[300],
+        primarySwatch: Colors.pink
       ),
       onGenerateRoute: Application.router.generator,
     );
