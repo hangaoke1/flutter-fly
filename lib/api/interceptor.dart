@@ -5,7 +5,7 @@ import 'dart:convert';
 
 import 'package:flutter_fly/router/application.dart';
 import 'package:flutter_fly/storage/index.dart';
-import 'package:flutter_fly/utils/fly.dart';
+import 'package:flutter_fly/utils/fly.dart' as fly;
 
 // dio拦截器
 class CustomInterceptors extends InterceptorsWrapper {
@@ -24,11 +24,11 @@ class CustomInterceptors extends InterceptorsWrapper {
     String jsonStr = json.encode(response.data);
     Map<String, dynamic> jsonObj = json.decode(jsonStr);
     if (response?.statusCode != 200) {
-      showText(text: '服务器异常');
+      fly.showText(text: '服务器异常');
     }
     if (jsonObj["code"] == -100) {
       if (CustomInterceptors.timer == null) {
-        showText(text: '登录状态已过期');
+        fly.showText(text: '登录状态已过期');
         CustomInterceptors.timer = new Timer(new Duration(seconds: 2), () {
           CustomInterceptors.timer = null;
           SpUtil.preferences.setString('TOKEN', null);
@@ -40,7 +40,7 @@ class CustomInterceptors extends InterceptorsWrapper {
       }
     }
     if (jsonObj["code"] != 200) {
-      showText(text: '${jsonObj['errmsg']}');
+      fly.showText(text: '${jsonObj['errmsg']}');
     }
     return super.onResponse(response);
   }
@@ -49,6 +49,8 @@ class CustomInterceptors extends InterceptorsWrapper {
   Future onError(DioError err) {
     print(
         ">>> ERROR[${err?.response?.statusCode}] => PATH: ${err?.request?.path}");
+    fly.cleanAll();
+    fly.showText(text: '网络异常');
     return super.onError(err);
   }
 }

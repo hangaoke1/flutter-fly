@@ -10,16 +10,17 @@ class Routes {
   static String singleListDemo = "/singleListDemo";
   static String tabListDemo = "/tabListDemo";
   static String tabList2Demo = "/tabList2Demo";
+  static String tabList3Demo = "/tabList3Demo";
 
   static void configureRoutes(Router router) {
     router.notFoundHandler = notFoundHandler;
-    router.define(root, handler: rootHandler);
     router.define(login, handler: loginHandler);
+    router.define(root, handler: rootHandler);
     router.define(user, handler: userHandler);
-    router.define(pageHelp, handler: helpHandler);
     router.define(pageMovieDetail, handler: movieDetailHandler);
     router.define(singleListDemo, handler: singleListDemoHandler);
     router.define(tabListDemo, handler: tabListDemoHandler);
     router.define(tabList2Demo, handler: tabList2DemoHandler);
+    router.define(tabList3Demo, handler: tabList3DemoHandler);
   }
 }

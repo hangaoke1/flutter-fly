@@ -28,8 +28,10 @@ class AppComponentState extends State<AppComponent> {
       navigatorObservers: [BotToastNavigatorObserver(), AppComponent.routeObserver],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: Colors.pink[300],
-        primarySwatch: Colors.pink
+        // primaryColor: Colors.pink[300],
+        // primarySwatch: Colors.pink
+        primaryColor: Colors.red,
+        primarySwatch: Colors.red
       ),
       onGenerateRoute: Application.router.generator,
     );

@@ -48,11 +48,7 @@ class _UserState extends State<User> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     // final double statusBarHeight = MediaQuery.of(context).padding.top;
-    TextStyle textFontStyle = TextStyle(
-      fontSize: 20,
-      color: Colors.black,
-      fontWeight: FontWeight.w500,
-    );
+    TextStyle textFontStyle = TextStyle(fontSize: 20, color: Colors.black);
 
     final listItem = ['用户名称', '用户账号', '用户等级', '可用余额'];
     List<Widget> listWidget = [];

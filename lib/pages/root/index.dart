@@ -3,9 +3,9 @@ import 'package:flutter_fly/app.dart';
 import 'package:flutter_fly/provider/user.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:flutter_fly/pages/user/user.dart';
 import 'package:flutter_fly/pages/home/index.dart';
-import 'package:flutter_fly/pages/hot/index.dart';
+import 'package:flutter_fly/pages/user/user.dart';
+import 'package:flutter_fly/pages/find/index.dart';
 import 'package:flutter_fly/pages/test/index.dart';
 
 import 'package:provider/provider.dart';
@@ -34,20 +34,20 @@ class _RootState extends State<Root> with RouteAware {
   @override
   void didPopNext() {
     // 返回页面
-    print('返回NewView');
+    print('返回页面root');
   }
 
   @override
   void didPush() async{
     // 首次进入
     await context.read<UserProvider>().setUser();
-    print('进入NewView');
+    print('进入页面root');
   }
 
   @override
   void didPushNext() {
     // 离开页面
-    print('>>> didPushNext');
+    print('离开页面root');
   }
 
   @override
@@ -90,9 +90,9 @@ class _RootState extends State<Root> with RouteAware {
       child: Scaffold(
         body: IndexedStack(
           children: <Widget>[
-            Test(),
             Home(),
-            Hot(),
+            Test(),
+            Find(),
             User(),
           ],
           index: _tabIndex,
@@ -108,22 +108,12 @@ class _RootState extends State<Root> with RouteAware {
             new BottomNavigationBarItem(
                 icon: Icon(Icons.view_list, size: 30), title: Text('列表')),
             new BottomNavigationBarItem(
-                icon: Icon(Icons.favorite, size: 30), title: Text('测试')),
+                icon: Icon(Icons.favorite, size: 30), title: Text('发现')),
             new BottomNavigationBarItem(
                 icon: Icon(Icons.account_circle, size: 30),
                 title: Text('个人中心')),
           ],
         ),
-        // bottomNavigationBar: CurvedNavigationBar( // 底部导航
-        //   key: _bottomNavigationKey,
-        //   items: <Widget  >[
-        //     Icon(Icons.list, size: 30),
-        //     Icon(Icons.home, size: 30),
-        //     Icon(Icons.business, size: 30),
-        //     Icon(Icons.school, size: 30)
-        //   ],
-        //   onTap: _onItemTapped,
-        // ),
       ),
     );
   }

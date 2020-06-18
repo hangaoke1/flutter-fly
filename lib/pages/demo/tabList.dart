@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-
-import 'list.dart';
+import 'package:flutter_fly/components/list/index.dart';
+import 'package:flutter_fly/components/listItemNormal/index.dart';
+import 'package:flutter_fly/models/order.dart';
+import 'package:flutter_fly/api/order.dart' as orderApi;
 
 class TabListDemo extends StatefulWidget {
   TabListDemo({Key key}) : super(key: key);
@@ -17,6 +19,16 @@ class _TabListDemoState extends State<TabListDemo>
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, initialIndex: 0, length: 2);
+  }
+
+  Future<dynamic> _load(int pageNo, int pageSize) async {
+    List<Order> orderList =
+        await orderApi.queryOrderList({"pageNo": pageNo, "pageSize": pageSize});
+    return orderList;
+  }
+
+  Widget _buildItem(item, index, list, listIns) {
+    return ListItemNormal(item: item, index: index, listIns: listIns);
   }
 
   @override
@@ -36,7 +48,16 @@ class _TabListDemoState extends State<TabListDemo>
       ),
       body: TabBarView(
         controller: _tabController,
-        children: [ListWrap(), ListWrap()],
+        children: [
+          ListWrap<Order>(
+            onLoad: _load,
+            itemBuilder: _buildItem,
+          ),
+          ListWrap<Order>(
+            onLoad: _load,
+            itemBuilder: _buildItem,
+          ),
+        ],
       ),
     );
   }

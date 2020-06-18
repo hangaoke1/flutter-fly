@@ -1,28 +1,30 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/ball_pulse_header.dart';
 import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-
 typedef LoadCallback = Future<dynamic> Function(int pageNo, int pageSize);
 
-typedef ItemBuilder<T> = Widget Function(T item);
+typedef ItemBuilder<T> = Widget Function(
+    T item, int index, List<T> list, ListWrapState listIns);
 
 class ListWrap<Item> extends StatefulWidget {
-
-  ListWrap({Key key, this.onLoad, this.itemBuilder}) : super(key: key);
+  ListWrap({Key key, this.onLoad, this.itemBuilder, this.refresh = true})
+      : super(key: key);
 
   final LoadCallback onLoad;
 
   final ItemBuilder<Item> itemBuilder;
 
-  _ListWrapState createState() => _ListWrapState<Item>();
+  final bool refresh;
+
+  ListWrapState createState() => ListWrapState<Item>();
 }
 
-class _ListWrapState<Item> extends State<ListWrap> with AutomaticKeepAliveClientMixin {
+class ListWrapState<Item> extends State<ListWrap>
+    with AutomaticKeepAliveClientMixin {
   List<Item> list = [];
   EasyRefreshController _controller;
   int pageNo = 1;
@@ -36,6 +38,16 @@ class _ListWrapState<Item> extends State<ListWrap> with AutomaticKeepAliveClient
     super.initState();
     list = [];
     _controller = EasyRefreshController();
+  }
+
+  refresh() {
+    setState(() {});
+  }
+
+  removeItem(int index) {
+    setState(() {
+      list.removeAt(index);
+    });
   }
 
   Future<List<Item>> _load() async {
@@ -77,12 +89,8 @@ class _ListWrapState<Item> extends State<ListWrap> with AutomaticKeepAliveClient
         size: 40.0,
       ),
       controller: _controller,
-      header: BallPulseHeader(
-        color: Theme.of(context).primaryColor
-      ),
-      footer: BallPulseFooter(
-        color: Theme.of(context).primaryColor
-      ),
+      header: BallPulseHeader(color: Theme.of(context).primaryColor),
+      footer: BallPulseFooter(color: Theme.of(context).primaryColor),
       onRefresh: _handleRefresh,
       onLoad: _handleLoad,
       scrollController: ScrollController(),
@@ -91,7 +99,7 @@ class _ListWrapState<Item> extends State<ListWrap> with AutomaticKeepAliveClient
           delegate: SliverChildBuilderDelegate(
             (context, index) {
               final Item item = list[index];
-              return widget.itemBuilder(item);
+              return widget.itemBuilder(item, index, list, this);
             },
             childCount: list.length,
           ),

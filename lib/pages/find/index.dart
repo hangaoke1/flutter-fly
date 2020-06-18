@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class Hot extends StatefulWidget {
-  Hot({Key key}) : super(key: key);
+class Find extends StatefulWidget {
+  Find({Key key}) : super(key: key);
 
-  _HotState createState() => _HotState();
+  _FindState createState() => _FindState();
 }
 
-class _HotState extends State<Hot> {
+class _FindState extends State<Find> {
   @override
   Widget build(BuildContext context) {
     return Container(

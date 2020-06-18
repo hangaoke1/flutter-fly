@@ -7,7 +7,7 @@ import 'package:flutter_fly/pages/user/user.dart';
 import 'package:flutter_fly/pages/demo/sigleList.dart';
 import 'package:flutter_fly/pages/demo/tabList.dart';
 import 'package:flutter_fly/pages/demo/tabList2.dart';
-import 'package:flutter_fly/pages/help/index.dart';
+import 'package:flutter_fly/pages/demo/tabList3.dart';
 import 'package:flutter_fly/pages/notFound/index.dart';
 import 'package:flutter_fly/pages/root/index.dart';
 import 'package:flutter_fly/pages/movieDetail/index.dart';
@@ -29,16 +29,16 @@ var loginHandler = Handler(
   return Login();
 });
 
-// 用户中心
-var userHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return User();
-});
-
 // 主页面
 var rootHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return checkLogin(Root());
+});
+
+// 用户中心
+var userHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return User();
 });
 
 // 电影详情
@@ -46,12 +46,6 @@ var movieDetailHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   String id = params['id'].first;
   return MovieDetail(id: id);
-});
-
-// 帮助页面
-var helpHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return Help();
 });
 
 // 404
@@ -75,4 +69,9 @@ var tabListDemoHandler = Handler(
 var tabList2DemoHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return TabList2Demo();
+});
+
+var tabList3DemoHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return TabList3Demo();
 });
