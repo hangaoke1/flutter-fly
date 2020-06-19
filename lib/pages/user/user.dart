@@ -1,12 +1,12 @@
 import 'package:flustars/flustars.dart';
-import 'package:day/day.dart';
+// import 'package:day/day.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/ball_pulse_header.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+
 import 'package:flutter_fly/constant/constant.dart';
 import 'package:flutter_fly/provider/theme.dart';
 import 'package:flutter_fly/provider/user.dart';
-
 import 'package:flutter_fly/router/application.dart';
 
 import 'package:provider/provider.dart';
@@ -19,7 +19,7 @@ class User extends StatefulWidget {
 
 class _UserState extends State<User> with WidgetsBindingObserver {
   EasyRefreshController _controller = EasyRefreshController();
-  Day nowDate = Day();
+  DateTime nowDate = DateTime.now();
 
   @override
   void initState() {
@@ -281,7 +281,7 @@ class _UserState extends State<User> with WidgetsBindingObserver {
                     ),
                     title: Text('注册日期'),
                     trailing: Text(
-                      '${nowDate.format("YYYY-MM-DD")}',
+                      '${DateUtil.formatDate(nowDate, format: DateFormats.full)}',
                       style: textStyle,
                     ),
                   ),

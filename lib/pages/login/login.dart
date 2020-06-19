@@ -20,8 +20,9 @@ class _LoginState extends State<Login> {
   // 声明视频控制器
   VideoPlayerController _controller;
   // 视频地址
-  final String videoUrl = "https://hgkcdn.oss-cn-shanghai.aliyuncs.com/image/5d6a7c25ba18b.mp4";
-      // "https://video.pearvideo.com/mp4/third/20190730/cont-1584187-10136163-164150-hd.mp4";
+  final String videoUrl =
+      "https://hgkcdn.oss-cn-shanghai.aliyuncs.com/image/5d6a7c25ba18b.mp4";
+  // "https://video.pearvideo.com/mp4/third/20190730/cont-1584187-10136163-164150-hd.mp4";
   String username;
   String password;
 
@@ -93,6 +94,10 @@ class _LoginState extends State<Login> {
     }
   }
 
+  rpx(double value) {
+    return ScreenUtil.getInstance().getWidth(value);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,7 +153,7 @@ class _LoginState extends State<Login> {
                       height: 30,
                     ),
                     Container(
-                      width: ScreenUtil().getWidthPx(650),
+                      width: rpx(650),
                       child: Form(
                           key: _loginKey,
                           autovalidate: false,
@@ -239,7 +244,7 @@ class _LoginState extends State<Login> {
                       onPressed: _handleLogin,
                       child: Container(
                         height: 50.0,
-                        width: ScreenUtil().getWidthPx(650),
+                        width: rpx(650),
                         child: Center(
                           child: Text(
                             "一键登录",

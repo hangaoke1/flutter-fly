@@ -183,13 +183,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.2.9"
-  day:
-    dependency: "direct main"
-    description:
-      name: day
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.5.5"
   decimal:
     dependency: transitive
     description:
@@ -279,13 +272,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.1"
-  flutter_screenutil:
-    dependency: "direct main"
-    description:
-      name: flutter_screenutil
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.1.0"
   flutter_slidable:
     dependency: "direct main"
     description:
@@ -394,6 +380,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.3.4"
+  jpush_flutter:
+    dependency: "direct main"
+    description:
+      name: jpush_flutter
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.5.5"
   js:
     dependency: transitive
     description:
