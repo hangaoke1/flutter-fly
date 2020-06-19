@@ -1,10 +1,11 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:flustars/flustars.dart';
+import 'package:flutter_fly/constant/constant.dart';
 import 'dart:convert';
 
 import 'package:flutter_fly/router/application.dart';
-import 'package:flutter_fly/storage/index.dart';
 import 'package:flutter_fly/utils/fly.dart' as fly;
 
 // dio拦截器
@@ -31,7 +32,7 @@ class CustomInterceptors extends InterceptorsWrapper {
         fly.showText(text: '登录状态已过期');
         CustomInterceptors.timer = new Timer(new Duration(seconds: 2), () {
           CustomInterceptors.timer = null;
-          SpUtil.preferences.setString('TOKEN', null);
+          SpUtil.putString(Constant.accessToken, null);
           Application.navigatorKey.currentState
               .pushNamedAndRemoveUntil('/login', (route) => false);
         });

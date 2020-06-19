@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_fly/constant/constant.dart';
 import 'package:video_player/video_player.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_fly/storage/index.dart';
 import 'package:flutter_fly/router/application.dart';
 import 'package:flutter_fly/api/user.dart' as userApi;
 import 'package:flutter_fly/utils/fly.dart' as fly;
@@ -85,7 +85,7 @@ class _LoginState extends State<Login> {
         fly.showText(text: "登录成功");
         await Future.delayed(Duration(milliseconds: 1000));
         print('登录成功 >>> $token');
-        SpUtil.preferences.setString('TOKEN', token);
+        SpUtil.putString(Constant.accessToken, token);
         Application.router.navigateTo(context, '/', clearStack: true);
       } catch (err) {}
     } else {
@@ -95,7 +95,6 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, width: 750, height: 1334);
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: GestureDetector(
@@ -149,7 +148,7 @@ class _LoginState extends State<Login> {
                       height: 30,
                     ),
                     Container(
-                      width: ScreenUtil().setWidth(650),
+                      width: ScreenUtil().getWidthPx(650),
                       child: Form(
                           key: _loginKey,
                           autovalidate: false,
@@ -240,7 +239,7 @@ class _LoginState extends State<Login> {
                       onPressed: _handleLogin,
                       child: Container(
                         height: 50.0,
-                        width: ScreenUtil().setWidth(650),
+                        width: ScreenUtil().getWidthPx(650),
                         child: Center(
                           child: Text(
                             "一键登录",

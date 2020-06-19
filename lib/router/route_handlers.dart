@@ -1,5 +1,7 @@
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
+import 'package:flutter_fly/constant/constant.dart';
 
 import 'package:flutter_fly/pages/login/login.dart';
 import 'package:flutter_fly/pages/user/user.dart';
@@ -11,11 +13,9 @@ import 'package:flutter_fly/pages/demo/tabList3.dart';
 import 'package:flutter_fly/pages/notFound/index.dart';
 import 'package:flutter_fly/pages/root/index.dart';
 import 'package:flutter_fly/pages/movieDetail/index.dart';
-import 'package:flutter_fly/storage/index.dart';
 
 Widget checkLogin(Widget page) {
-  String token = SpUtil.preferences.getString('TOKEN');
-  print('>>> 用户登录状态token: $token');
+  String token = SpUtil.getString(Constant.accessToken);
   if (token != null) {
     return page;
   } else {

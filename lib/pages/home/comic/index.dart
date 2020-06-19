@@ -42,14 +42,16 @@ class _ComicState extends State<Comic> {
                   alignment: Alignment.center,
                   child: Text('tab2列表', style: TextStyle(fontSize: 22))),
               onTap: () {
-                Application.router.navigateTo(context, '/tabList2Demo');
+                Application.router.navigateTo(context, '/tabList2Demo',
+                    transition: TransitionType.cupertino);
               }),
           GestureDetector(
               child: Container(
                   alignment: Alignment.center,
                   child: Text('tab3列表', style: TextStyle(fontSize: 22))),
               onTap: () {
-                Application.router.navigateTo(context, '/tabList3Demo');
+                Application.router.navigateTo(context, '/tabList3Demo',
+                    transition: TransitionType.cupertino);
               })
         ],
       ),

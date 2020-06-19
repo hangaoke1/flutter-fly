@@ -17,9 +17,10 @@ environment:
   sdk: ">=2.5.0 <3.0.0"
 
 dependencies:
+  flustars: ^0.3.2 #常用工具函数
+  flui: any
   pull_to_refresh_notification: any
   loading_more_list: any
-  
   flutter_slidable: ^0.5.4 #滑动拉出操作按钮
   flutter_cache_manager: '1.4.1' #文件缓存管理
   day: ^0.5.5 #日期格式化
