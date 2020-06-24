@@ -1,15 +1,14 @@
+import 'package:fluro/fluro.dart';
 import 'package:flustars/flustars.dart';
-// import 'package:day/day.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/ball_pulse_header.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
-import 'package:flutter_fly/constant/constant.dart';
-import 'package:flutter_fly/provider/theme.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_fly/provider/user.dart';
 import 'package:flutter_fly/router/application.dart';
-
-import 'package:provider/provider.dart';
+import 'package:flutter_fly/router/route_animate.dart';
+import 'package:flutter_fly/utils/theme.dart';
 
 class User extends StatefulWidget {
   User({Key key}) : super(key: key);
@@ -41,9 +40,9 @@ class _UserState extends State<User> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this); //销毁
   }
 
-  _logout() {
-    SpUtil.putString(Constant.accessToken, null);
-    Application.router.navigateTo(context, '/login', clearStack: true);
+  _goSetting() {
+    Application.router.navigateTo(context, '/setting',
+        transition: TransitionType.custom, transitionBuilder: scaleAni);
   }
 
   rpx(double value) {
@@ -52,17 +51,16 @@ class _UserState extends State<User> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-
-    bool isDark = Theme.of(context).brightness == Brightness.dark;
+    bool isDark = ThemeUtil.isDark(context);
     Color primaryColor = Theme.of(context).primaryColor;
     Color cardColor = Theme.of(context).cardColor;
-    Color bgColor = Theme.of(context).scaffoldBackgroundColor;
+    Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
     Color shawDowColor = isDark ? Color(0xFF000000) : Color(0xFFEEEEEE);
     TextStyle textStyle = Theme.of(context).textTheme.bodyText1;
     TextStyle subTextStyle = Theme.of(context).textTheme.subtitle1;
 
     return Container(
-      decoration: BoxDecoration(color: bgColor),
+      decoration: BoxDecoration(color: scaffoldBackgroundColor),
       child: EasyRefresh.custom(
         header: BallPulseHeader(color: primaryColor),
         controller: _controller,
@@ -73,13 +71,11 @@ class _UserState extends State<User> with WidgetsBindingObserver {
         },
         slivers: <Widget>[
           SliverToBoxAdapter(
-            child: Container(
-              padding: EdgeInsets.only(bottom: rpx(200)),
-              child: Stack(
-                alignment: Alignment.center,
-                overflow: Overflow.visible,
-                children: <Widget>[
-                  Container(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(bottom: rpx(30)),
+                  child: Container(
                     padding: EdgeInsets.only(
                       top: rpx(100),
                       bottom: rpx(50),
@@ -139,94 +135,67 @@ class _UserState extends State<User> with WidgetsBindingObserver {
                       ],
                     ),
                   ),
-                  Positioned(
-                    bottom: rpx(-180),
-                    child: Container(
-                      padding: EdgeInsets.all(rpx(30)),
-                      width: rpx(700),
-                      height: rpx(200),
-                      decoration: BoxDecoration(
-                          color: cardColor,
-                          borderRadius: BorderRadius.circular(rpx(10)),
-                          boxShadow: [
-                            BoxShadow(
-                              // offset: Offset(-3, -3),
-                              color: shawDowColor,
-                              blurRadius: 10.0,
-                              spreadRadius: 0.5,
+                ),
+                Center(
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: rpx(30)),
+                    padding: EdgeInsets.all(rpx(30)),
+                    width: rpx(700),
+                    height: rpx(200),
+                    decoration: BoxDecoration(
+                        color: cardColor,
+                        borderRadius: BorderRadius.circular(rpx(10)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: shawDowColor,
+                            blurRadius: 10.0,
+                            spreadRadius: 0.5,
+                          ),
+                        ]),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              child: Icon(Icons.face, color: Colors.orange),
+                              margin: EdgeInsets.only(bottom: rpx(10)),
                             ),
-                          ]),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                child: Icon(Icons.face, color: Colors.orange),
-                                margin: EdgeInsets.only(bottom: rpx(10)),
-                              ),
-                              Text('充值')
-                            ],
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                child: Icon(Icons.face, color: Colors.yellow),
-                                margin: EdgeInsets.only(bottom: rpx(10)),
-                              ),
-                              Text('提现')
-                            ],
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                child: Icon(Icons.face, color: Colors.red),
-                                margin: EdgeInsets.only(bottom: rpx(10)),
-                              ),
-                              Text('转存')
-                            ],
-                          ),
-                        ],
-                      ),
+                            Text('充值')
+                          ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              child: Icon(Icons.face, color: Colors.yellow),
+                              margin: EdgeInsets.only(bottom: rpx(10)),
+                            ),
+                            Text('提现')
+                          ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              child: Icon(Icons.face, color: Colors.red),
+                              margin: EdgeInsets.only(bottom: rpx(10)),
+                            ),
+                            Text('转存')
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
           SliverList(
             delegate: SliverChildListDelegate(
               [
-                Material(
-                  color: cardColor,
-                  child: InkWell(
-                    onTap: () {},
-                    child: Container(
-                        child: ListTile(
-                      leading: Icon(
-                        IconData(0xe65a, fontFamily: 'Iconfont'),
-                        size: 20.0,
-                      ),
-                      title: Text('用户名称'),
-                      trailing: Container(
-                        width: rpx(400),
-                        child: Text(
-                          '${context.watch<UserProvider>().user.username}',
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.right,
-                          style: textStyle,
-                        ),
-                      ),
-                    )),
-                  ),
-                ),
-                Divider(
-                  height: 1,
-                ),
                 Container(
                   decoration: BoxDecoration(color: cardColor),
                   child: ListTile(
@@ -290,41 +259,10 @@ class _UserState extends State<User> with WidgetsBindingObserver {
                   height: 1,
                 ),
                 Container(
+                  margin: EdgeInsets.only(top: rpx(20), bottom: rpx(50)),
                   decoration: BoxDecoration(color: cardColor),
                   child: ListTile(
-                    leading: Icon(
-                      IconData(0xe6e4, fontFamily: 'Iconfont'),
-                      size: 20.0,
-                    ),
-                    title: Text('版本号'),
-                    trailing: Text('V 1.0.0', style: textStyle),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: rpx(20)),
-                  decoration: BoxDecoration(color: cardColor),
-                  child: ListTile(
-                    onTap: () {
-                      ThemeMode mode =
-                          context.read<ThemeProvider>().getThemeMode();
-                      if (mode == ThemeMode.dark) {
-                        context.read<ThemeProvider>().setTheme(ThemeMode.light);
-                      } else {
-                        context.read<ThemeProvider>().setTheme(ThemeMode.dark);
-                      }
-                    },
-                    leading: Icon(
-                      IconData(0xe66f, fontFamily: 'Iconfont'),
-                      size: 20.0,
-                    ),
-                    title: Text('主题切换'),
-                    trailing: Text(SpUtil.getString(Constant.theme)),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: rpx(20)),
-                  decoration: BoxDecoration(color: cardColor),
-                  child: ListTile(
+                    onTap: _goSetting,
                     leading: Icon(
                       IconData(0xe68f, fontFamily: 'Iconfont'),
                       size: 20.0,
@@ -336,27 +274,6 @@ class _UserState extends State<User> with WidgetsBindingObserver {
                     ),
                   ),
                 ),
-                Center(
-                  child: Container(
-                    width: rpx(420),
-                    margin: EdgeInsets.only(top: rpx(40), bottom: rpx(100)),
-                    child: RaisedButton(
-                      padding: EdgeInsets.only(top: rpx(20), bottom: rpx(20)),
-                      color: primaryColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(rpx(10)),
-                      ),
-                      child: Text(
-                        '退出登录',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                        ),
-                      ),
-                      onPressed: _logout,
-                    ),
-                  ),
-                )
               ],
             ),
           )

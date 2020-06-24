@@ -1,7 +1,11 @@
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+double rpx(double value) {
+  return ScreenUtil.getInstance().getWidth(value);
+}
 
 CancelFunc showLoading({String text = ''}) {
   var close = BotToast.showCustomLoading(toastBuilder: (cancel) {
@@ -13,9 +17,9 @@ CancelFunc showLoading({String text = ''}) {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Container(
-              width: ScreenUtil().setWidth(375),
+              width: rpx(375),
               margin: EdgeInsets.only(
-                bottom: ScreenUtil().setWidth(10),
+                bottom: rpx(10),
               ),
               child: SpinKitFadingCircle(
                 color: Colors.white,

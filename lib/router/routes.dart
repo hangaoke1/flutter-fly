@@ -5,6 +5,7 @@ class Routes {
   static String root = "/";
   static String login = "/login";
   static String user = "/user";
+  static String setting = "/setting";
   static String pageMovieDetail = "/movieDetail";
   static String pageHelp = "/help";
   static String singleListDemo = "/singleListDemo";
@@ -17,6 +18,7 @@ class Routes {
     router.define(login, handler: loginHandler);
     router.define(root, handler: rootHandler);
     router.define(user, handler: userHandler);
+    router.define(setting, handler: settingHandler);
     router.define(pageMovieDetail, handler: movieDetailHandler);
     router.define(singleListDemo, handler: singleListDemoHandler);
     router.define(tabListDemo, handler: tabListDemoHandler);

@@ -1,52 +1,54 @@
-import 'dart:async';
-
-import './sample_list_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_fly/pages/demo/tab_bar.dart';
+import 'package:flutter_fly/pages/test/banner.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
 
-/// NestedScrollView示例页面
+import 'package:flutter_fly/components/list/index.dart';
+import 'package:flutter_fly/components/listItemNormal/index.dart';
+import 'package:flutter_fly/models/order.dart';
+import 'package:flutter_fly/api/order.dart' as orderApi;
+
 class TabList2Demo extends StatefulWidget {
-  @override
-  TabList2DemoState createState() {
-    return TabList2DemoState();
-  }
+  TabList2Demo({Key key}) : super(key: key);
+
+  _TabList2DemoState createState() => _TabList2DemoState();
 }
 
-class TabList2DemoState extends State<TabList2Demo>
+class _TabList2DemoState extends State<TabList2Demo>
     with SingleTickerProviderStateMixin {
-  // 滚动控制器
-  ScrollController _scrollController;
-  // Tab控制器
   TabController _tabController;
-  int _tabIndex = 0;
-  // 列表
-  int _listCount = 0;
-  // 表格
-  int _gridCount = 0;
+  List<String> tabs = <String>['汽车', '体育'];
 
-  // 初始化
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-    _scrollController = ScrollController();
+    _tabController = TabController(vsync: this, initialIndex: 0, length: 2);
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _tabController.dispose();
-    _scrollController.dispose();
+  Future<dynamic> _load(int pageNo, int pageSize) async {
+    List<Order> orderList =
+        await orderApi.queryOrderList({"pageNo": pageNo, "pageSize": pageSize});
+    return orderList;
+  }
+
+  Widget _buildItem(item, index, list, listIns) {
+    return ListItemNormal(item: item, index: index, listIns: listIns);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Container(
+            height: 40,
+            alignment: Alignment.center,
+            padding: EdgeInsets.symmetric(horizontal: 25),
+            child: Text('sliverTab')),
+      ),
       body: extended.NestedScrollView(
         pinnedHeaderSliverHeightBuilder: () {
-          return MediaQuery.of(context).padding.top + kToolbarHeight;
+          return 50;
         },
         innerScrollPositionKeyBuilder: () {
           if (_tabController.index == 0) {
@@ -55,118 +57,34 @@ class TabList2DemoState extends State<TabList2Demo>
             return Key('Tab1');
           }
         },
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
+        headerSliverBuilder: (subContext, innerBoxIsScrolled) {
           return <Widget>[
-            new SliverAppBar(
-              title: Text("NestedScrollView"),
-              centerTitle: true,
-              expandedHeight: 190.0,
-              flexibleSpace: SingleChildScrollView(
-                physics: NeverScrollableScrollPhysics(),
-                child: Container(),
-              ),
-              floating: false,
-              pinned: true,
-              bottom: new PreferredSize(
-                child: new Card(
-                  color: Theme.of(context).primaryColor,
-                  elevation: 0.0,
-                  margin: new EdgeInsets.all(0.0),
-                  shape: new RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(0.0)),
-                  ),
-                  child: new TabBar(
-                    controller: _tabController,
-                    onTap: (index) {
-                      setState(() {
-                        _tabIndex = index;
-                      });
-                    },
-                    tabs: <Widget>[
-                      new Tab(
-                        text: 'List',
-                      ),
-                      new Tab(
-                        text: 'Grid',
-                      ),
-                    ],
-                  ),
-                ),
-                preferredSize: new Size(double.infinity, 46.0),
-              ),
+            SliverPersistentHeader(
+              delegate: DemoHeader(
+                  text: '足球', color: Colors.red, img: 'images/dm1@2x.png'),
             ),
+            SliverPersistentHeader(
+                pinned: true, // 顶部固定
+                delegate: WeTabBar(tabs: tabs, controller: _tabController)),
           ];
         },
-        body: IndexedStack(
-          index: _tabIndex,
+        body: TabBarView(
+          controller: _tabController,
           children: <Widget>[
             extended.NestedScrollViewInnerScrollPositionKeyWidget(
               Key('Tab0'),
-              EasyRefresh(
-                firstRefresh: true,
-                child: ListView.builder(
-                  padding: EdgeInsets.all(0.0),
-                  itemBuilder: (context, index) {
-                    return SampleListItem();
-                  },
-                  itemCount: _listCount,
-                ),
-                onRefresh: () async {
-                  await Future.delayed(Duration(seconds: 2), () {
-                    if (mounted) {
-                      setState(() {
-                        _listCount = 20;
-                      });
-                    }
-                  });
-                },
-                onLoad: () async {
-                  await Future.delayed(Duration(seconds: 2), () {
-                    if (mounted) {
-                      setState(() {
-                        _listCount += 10;
-                      });
-                    }
-                  });
-                },
+              ListWrap<Order>(
+                onLoad: _load,
+                itemBuilder: _buildItem,
               ),
             ),
             extended.NestedScrollViewInnerScrollPositionKeyWidget(
               Key('Tab1'),
-              EasyRefresh(
-                firstRefresh: true,
-                child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 6 / 7,
-                  ),
-                  itemBuilder: (context, index) {
-                    return SampleListItem(
-                      direction: Axis.horizontal,
-                    );
-                  },
-                  itemCount: _gridCount,
-                ),
-                onRefresh: () async {
-                  await Future.delayed(Duration(seconds: 2), () {
-                    if (mounted) {
-                      setState(() {
-                        _gridCount = 30;
-                      });
-                    }
-                  });
-                },
-                onLoad: () async {
-                  await Future.delayed(Duration(seconds: 2), () {
-                    if (mounted) {
-                      setState(() {
-                        _gridCount += 10;
-                      });
-                    }
-                  });
-                },
+              ListWrap<Order>(
+                onLoad: _load,
+                itemBuilder: _buildItem,
               ),
-            ),
+            )
           ],
         ),
       ),
