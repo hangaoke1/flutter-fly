@@ -16,10 +16,10 @@ class Setting extends StatefulWidget {
 
 class _SettingState extends State<Setting> {
   PackageInfo _packageInfo = PackageInfo(
-    appName: 'Unknown',
-    packageName: 'Unknown',
-    version: 'Unknown',
-    buildNumber: 'Unknown',
+    appName: '-',
+    packageName: '-',
+    version: '-',
+    buildNumber: '-',
   );
 
   @override
@@ -58,6 +58,7 @@ class _SettingState extends State<Setting> {
       {String title, Widget leading, Widget trailing, Function onTap}) {
     Color cardColor = Theme.of(context).cardColor;
     return Container(
+      margin: EdgeInsets.only(bottom: rpx(20)),
       decoration: BoxDecoration(color: cardColor),
       child: ListTile(
         onTap: onTap,
@@ -88,19 +89,13 @@ class _SettingState extends State<Setting> {
               ),
               trailing: Text(SpUtil.getString(Constant.theme)),
             ),
-            Divider(
-              height: rpx(20),
-            ),
             _infoTile(
               title: '版本号',
               leading: Icon(
                 IconData(0xe6e4, fontFamily: 'Iconfont'),
                 size: 20.0,
               ),
-              trailing: Text('V 1.0.0', style: textStyle),
-            ),
-            Divider(
-              height: rpx(20),
+              trailing: Text(_packageInfo.version, style: textStyle),
             ),
             Center(
               child: Container(

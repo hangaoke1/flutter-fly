@@ -21,6 +21,14 @@ class _ComicState extends State<Comic> {
         children: <Widget>[
           GestureDetector(
               child: Container(
+                  alignment: Alignment.center,
+                  child: Text('聊天', style: TextStyle(fontSize: 22))),
+              onTap: () {
+                Application.router.navigateTo(context, '/chat',
+                    transition: TransitionType.cupertino);
+              }),
+          GestureDetector(
+              child: Container(
                   margin: const EdgeInsets.only(bottom: 20),
                   alignment: Alignment.center,
                   child: Text('单个列表', style: TextStyle(fontSize: 22))),

@@ -8,6 +8,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.36.4"
+  animate_do:
+    dependency: "direct main"
+    description:
+      name: animate_do
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.7.2"
   archive:
     dependency: transitive
     description:
@@ -99,6 +106,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "7.1.0"
+  carousel_slider:
+    dependency: "direct main"
+    description:
+      name: carousel_slider
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.2.1"
   charcode:
     dependency: transitive
     description:
@@ -232,13 +246,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.10.11"
-  flui:
-    dependency: "direct main"
-    description:
-      name: flui
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.8.0"
   fluro:
     dependency: "direct main"
     description:
@@ -293,6 +300,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.1.2"
+  flutter_staggered_grid_view:
+    dependency: "direct main"
+    description:
+      name: flutter_staggered_grid_view
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.3.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter

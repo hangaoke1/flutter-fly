@@ -11,7 +11,13 @@ typedef ItemBuilder<T> = Widget Function(
     T item, int index, List<T> list, ListWrapState listIns);
 
 class ListWrap<Item> extends StatefulWidget {
-  ListWrap({Key key, this.onLoad, this.itemBuilder, this.refresh = true})
+  ListWrap(
+      {Key key,
+      this.onLoad,
+      this.itemBuilder,
+      this.refresh = true,
+      this.shrinkWrap = false,
+      this.reverse = false})
       : super(key: key);
 
   final LoadCallback onLoad;
@@ -19,6 +25,10 @@ class ListWrap<Item> extends StatefulWidget {
   final ItemBuilder<Item> itemBuilder;
 
   final bool refresh;
+
+  final bool reverse;
+
+  final bool shrinkWrap;
 
   ListWrapState createState() => ListWrapState<Item>();
 }
@@ -38,10 +48,19 @@ class ListWrapState<Item> extends State<ListWrap>
     super.initState();
     list = [];
     _controller = EasyRefreshController();
+    if (!widget.refresh) {
+      _handleRefresh();
+    }
   }
 
   refresh() {
     setState(() {});
+  }
+
+  insertItem(Item item) {
+    setState(() {
+      list.insert(0, item);
+    });
   }
 
   removeItem(int index) {
@@ -83,6 +102,8 @@ class ListWrapState<Item> extends State<ListWrap>
   Widget build(BuildContext context) {
     super.build(context);
     return EasyRefresh.custom(
+      reverse: widget.reverse,
+      shrinkWrap: widget.shrinkWrap,
       firstRefresh: true,
       firstRefreshWidget: SpinKitFadingCube(
         color: Theme.of(context).primaryColor,
@@ -91,7 +112,7 @@ class ListWrapState<Item> extends State<ListWrap>
       controller: _controller,
       header: BallPulseHeader(color: Theme.of(context).primaryColor),
       footer: BallPulseFooter(color: Theme.of(context).primaryColor),
-      onRefresh: _handleRefresh,
+      onRefresh: widget.refresh ? _handleRefresh : null,
       onLoad: _handleLoad,
       scrollController: ScrollController(),
       slivers: <Widget>[

@@ -46,7 +46,7 @@ class ThemeProvider extends ChangeNotifier {
       accentColor: isDarkMode ? Colours.dark_app_main : Colours.app_main,
       errorColor: isDarkMode ? Colours.dark_red : Colours.red,
       // Tab指示器颜色
-      indicatorColor: isDarkMode ? Colours.dark_app_main : Colours.app_main,
+      indicatorColor: isDarkMode ? Colors.orange : Colours.app_main,
       // 页面背景色
       scaffoldBackgroundColor: isDarkMode ? Colours.dark_bg_color : Colours.bg_color,
       // 主要用于Material背景色

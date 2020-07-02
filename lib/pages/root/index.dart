@@ -8,6 +8,7 @@ import 'package:flutter_fly/pages/find/index.dart';
 import 'package:flutter_fly/pages/test/index.dart';
 
 import 'package:provider/provider.dart';
+
 class Root extends StatefulWidget {
   Root({Key key}) : super(key: key);
 
@@ -17,6 +18,7 @@ class Root extends StatefulWidget {
 class _RootState extends State<Root> with RouteAware {
   int _tabIndex = 0;
   GlobalKey _bottomNavigationKey = GlobalKey();
+  final PageController _pageController = PageController();
 
   @override
   void didChangeDependencies() {
@@ -37,7 +39,7 @@ class _RootState extends State<Root> with RouteAware {
   }
 
   @override
-  void didPush() async{
+  void didPush() async {
     // 首次进入
     await context.read<UserProvider>().setUser();
     print('进入页面root');
@@ -76,6 +78,10 @@ class _RootState extends State<Root> with RouteAware {
   }
 
   void _onItemTapped(int index) {
+     _pageController.jumpToPage(index);
+  }
+
+  _onPageChanged(int index) {
     setState(() {
       _tabIndex = index;
     });
@@ -86,14 +92,16 @@ class _RootState extends State<Root> with RouteAware {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        body: IndexedStack(
+        body: PageView(
+          controller: _pageController,
+          onPageChanged: _onPageChanged,
           children: <Widget>[
             Home(),
             Test(),
             Find(),
             User(),
           ],
-          index: _tabIndex,
+          physics: const NeverScrollableScrollPhysics(), // 禁止滑动
         ),
         bottomNavigationBar: BottomNavigationBar(
           key: _bottomNavigationKey,

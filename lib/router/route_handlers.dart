@@ -6,6 +6,7 @@ import 'package:flutter_fly/constant/constant.dart';
 import 'package:flutter_fly/pages/login/login.dart';
 import 'package:flutter_fly/pages/user/user.dart';
 import 'package:flutter_fly/pages/setting/setting.dart';
+import 'package:flutter_fly/pages/chat/chat.dart';
 
 import 'package:flutter_fly/pages/demo/sigleList.dart';
 import 'package:flutter_fly/pages/demo/tabList.dart';
@@ -80,4 +81,9 @@ var tabList2DemoHandler = Handler(
 var tabList3DemoHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return TabList3Demo();
+});
+
+var chatHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return Chat();
 });

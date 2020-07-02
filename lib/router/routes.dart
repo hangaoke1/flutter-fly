@@ -12,6 +12,7 @@ class Routes {
   static String tabListDemo = "/tabListDemo";
   static String tabList2Demo = "/tabList2Demo";
   static String tabList3Demo = "/tabList3Demo";
+  static String chat = "/chat";
 
   static void configureRoutes(Router router) {
     router.notFoundHandler = notFoundHandler;
@@ -24,5 +25,6 @@ class Routes {
     router.define(tabListDemo, handler: tabListDemoHandler);
     router.define(tabList2Demo, handler: tabList2DemoHandler);
     router.define(tabList3Demo, handler: tabList3DemoHandler);
+    router.define(chat, handler: chatHandler);
   }
 }
