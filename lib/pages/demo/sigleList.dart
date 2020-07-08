@@ -34,6 +34,7 @@ class _SingleListDemoState extends State<SingleListDemo> {
     return Scaffold(
       appBar: AppBar(title: Text('列表加载'), elevation: 0.5),
       body: ListWrap<Order>(
+        firstRefresh: true,
         onLoad: _load,
         itemBuilder: _buildItem,
       ),

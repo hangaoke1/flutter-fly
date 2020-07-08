@@ -1,38 +1,52 @@
 import 'dart:async';
+import 'dart:ui' as ui;
+import 'package:animate_do/animate_do.dart';
+import 'package:extended_list/extended_list.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'package:flutter_fly/components/list/index.dart';
-import 'package:flutter_fly/components/listItem/index.dart';
-import 'package:flutter_fly/api/order.dart' as orderApi;
-import 'package:flutter_fly/models/index.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/style.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_fly/pages/chat/chat_message.dart';
 
 class Chat extends StatefulWidget {
   @override
   _ChatState createState() => _ChatState();
 }
 
-class _ChatState extends State<Chat> {
-  List<int> top = [];
-  List<int> bottom = [];
+class _ChatState extends State<Chat> with WidgetsBindingObserver {
+  List<String> chatList = [];
   bool _loading = false;
-  bool _nomore = false;
+  FocusNode _focusNode = FocusNode(); // 初始化一个FocusNode控件
 
-  final ScrollController _scroller = ScrollController(
-    initialScrollOffset: 0,
-  );
+  TextEditingController mEditController = TextEditingController();
+  ScrollController _scroller = ScrollController();
+
+  bool showEmoji = false;
+  bool mBottomLayoutShow = false;
+  double _keyboardHeight = 200;
+
+  bool get hasMore => chatList.length < 100;
 
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
+
+    // 滚动处理
     _scroller.addListener(() {
+      if (!_scroller.hasClients) {
+        return;
+      }
       // 用户滚动距离
       final double offset = _scroller.position.pixels;
       // 顶部距离
-      final double min = _scroller.position.minScrollExtent;
+      final double max = _scroller.position.maxScrollExtent;
+
       // 触发历史消息加载
-      if (offset - min < 20 && !_loading && !_nomore) {
+      if (offset - max == 0 && !_loading && hasMore) {
         _loadHistory();
       } else {
-        print('>>> 不满足');
+        // print('>>> 不满足');
       }
     });
     _initChatList();
@@ -40,20 +54,42 @@ class _ChatState extends State<Chat> {
   }
 
   @override
+  void didChangeMetrics() {
+    final mediaQueryData = MediaQueryData.fromWindow(ui.window);
+    final keyHeight = mediaQueryData?.viewInsets?.bottom;
+    if (keyHeight != 0) {
+      if (mounted) {
+        setState(() {
+          mBottomLayoutShow = true;
+          _keyboardHeight = keyHeight;
+          showEmoji = false;
+        });
+        _scrollToBottom();
+      }
+    } else {
+      if (mounted) {
+        setState(() {
+          mBottomLayoutShow = false;
+        });
+      }
+    }
+  }
+
+  @override
   void dispose() {
-    // 移除监听器
-    _scroller.dispose();
     super.dispose();
+    // 移除滚动监听器
+    _scroller.dispose();
   }
 
   _initChatList() {
     setState(() {
-      bottom = List<int>.generate(10, (i) => i + 1);
+      chatList = List<String>.generate(3, (i) => (i + 1).toString());
     });
-    _scrollToBottom(offset: 0, milliseconds: 0);
   }
 
   Future<void> _loadHistory() async {
+    if (!_loading) {}
     setState(() {
       _loading = true;
     });
@@ -61,10 +97,12 @@ class _ChatState extends State<Chat> {
     Timer(
       const Duration(milliseconds: 1000),
       () {
-        addItems();
-        setState(() {
-          _loading = false;
-        });
+        if (mounted) {
+          addItems();
+          setState(() {
+            _loading = false;
+          });
+        }
       },
     );
     return;
@@ -72,107 +110,206 @@ class _ChatState extends State<Chat> {
 
   void addItems() {
     setState(() {
-      final List<int> a = <int>[];
-      for (var i = 0; i < 3; i++) {
-        a.add(-top.length - i);
+      final List<String> a = <String>[];
+      for (var i = 0; i < 30; i++) {
+        a.add((-chatList.length - i).toString());
       }
-      top.addAll(a);
+      chatList.addAll(a);
     });
   }
 
-  void addItems2() {
+  void addItems2(String text) {
     setState(() {
-      final List<int> a = <int>[];
-      for (var i = 0; i < 3; i++) {
-        a.add(bottom.length + i);
-      }
-      bottom.addAll(a);
+      chatList.insert(0, text);
     });
     _scrollToBottom();
   }
 
   void _scrollToBottom({double offset = 0, int milliseconds = 300}) {
-    // ignore: always_specify_types
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_scroller.hasClients) {
+        return;
+      }
       if (milliseconds == 0) {
         _scroller.jumpTo(
-          _scroller.position.maxScrollExtent - 40,
+          0,
         );
       } else {
         _scroller.animateTo(
-          _scroller.position.maxScrollExtent + offset,
+          0,
           curve: Curves.easeOut,
-          duration: const Duration(milliseconds: 300),
+          duration: Duration(milliseconds: milliseconds),
         );
       }
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // ignore: always_specify_types
-    const Key centerKey = ValueKey('second-sliver-list');
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('ChatList'),
-        ),
-        body: SafeArea(
-          top: false,
-          bottom: false,
-          child: CustomScrollView(
-            controller: _scroller,
-            physics: const ClampingScrollPhysics(),
-            center: centerKey,
-            slivers: <Widget>[
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    if (_loading && index == top.length) {
-                      return Container(
-                        alignment: Alignment.center,
-                        height: 100.0,
-                        child: Text('加载中...'),
-                      );
-                    } else {
-                      return Container(
-                        alignment: Alignment.center,
-                        color: Colors.green[200 + top[index] % 4 * 100],
-                        height: 100 + top[index] % 4 * 20.0,
-                        child: Text('Item: ${top[index]}'),
-                      );
-                    }
-                  },
-                  childCount: _loading ? top.length + 1 : top.length,
+  _handleSendMessage(String text) {
+    mEditController.clear();
+    addItems2(text);
+    FocusScope.of(context).requestFocus(_focusNode);
+  }
+
+  // 生成底部输入框
+  Widget _buildInputTextComposer() {
+    Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
+    return Container(
+      padding: const EdgeInsets.fromLTRB(2, 10, 2, 10),
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                child: Icon(Icons.settings_voice),
+              ),
+              Expanded(
+                child: TextField(
+                  textInputAction: TextInputAction.send,
+                  focusNode: _focusNode,
+                  controller: mEditController,
+                  onSubmitted: _handleSendMessage,
+                  style: TextStyle(fontSize: 16),
+                  decoration: InputDecoration(
+                    hintStyle: TextStyle(fontSize: 16),
+                    hintText: "请输入内容...",
+                    contentPadding: EdgeInsets.all(5.0),
+                    fillColor: Colors.white,
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(4),
+                      ),
+                    ),
+                  ),
                 ),
               ),
-              SliverList(
-                key: centerKey,
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return Container(
-                      alignment: Alignment.center,
-                      color: Colors.green[200 + bottom[index] % 4 * 100],
-                      height: 100 + bottom[index] % 4 * 20.0,
-                      child: Text('Item: ${bottom[index]}'),
-                    );
-                  },
-                  childCount: bottom.length,
+              GestureDetector(
+                onTap: () => {
+                  setState(() {
+                    _focusNode.unfocus();
+                    mBottomLayoutShow = false;
+                    showEmoji = true;
+                    _scrollToBottom();
+                  })
+                },
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                  child: Icon(Icons.insert_emoticon),
                 ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                child: Icon(Icons.add),
               ),
             ],
           ),
-        ),
-        persistentFooterButtons: <Widget>[
-          FloatingActionButton(
-            onPressed: addItems,
-            heroTag: 'first',
-            child: Icon(Icons.add),
+          Container(
+            height: mBottomLayoutShow ? _keyboardHeight : 0,
+            child: Text(''),
           ),
-          FloatingActionButton(
-            onPressed: _scrollToBottom,
-            heroTag: 'sub',
-            child: Icon(Icons.arrow_drop_down),
-          )
-        ]);
+          showEmoji
+              ? Container(
+                  color: scaffoldBackgroundColor,
+                  width: rpx(750),
+                  height: rpx(400),
+                  child: Text('emoji表情'),
+                )
+              : Container()
+        ],
+      ),
+    );
+  }
+
+  rpx(double value) {
+    return ScreenUtil.getInstance().getWidth(value);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: const Text('ChatList'),
+      ),
+      body: SafeArea(
+        top: false,
+        bottom: false,
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: GestureDetector(
+                onTapUp: (TapUpDetails fd) {
+                  if (_focusNode.hasFocus) {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  }
+                  setState(() {
+                    showEmoji = false;
+                  });
+                },
+                child: ExtendedListView.builder(
+                    physics: BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics(),
+                    ),
+                    controller: _scroller,
+                    reverse: true,
+                    extendedListDelegate: const ExtendedListDelegate(
+                      closeToTrailing: true,
+                    ),
+                    itemCount: chatList.length + 1,
+                    itemBuilder: (BuildContext context, int index) {
+                      if (index == chatList.length) {
+                        return Container(
+                          padding: EdgeInsets.all(rpx(40)),
+                          child: _loading
+                              ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    SpinKitFadingCircle(
+                                      color: Colors.black,
+                                      size: 20.0,
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(left: rpx(10)),
+                                      child: Text('加载中'),
+                                    ),
+                                  ],
+                                )
+                              : Center(
+                                  child: Text(hasMore ? '下拉加载更多消息' : '没有更多啦~'),
+                                ),
+                        );
+                      }
+                      return ChatMessage(
+                        isSelf: true,
+                        child: Html(
+                          data: """<span>${chatList[index]}</span>""",
+                          shrinkWrap: true,
+                          style: {
+                            "html": Style(
+                              display: Display.INLINE,
+                              margin: EdgeInsets.all(0),
+                            ),
+                            "body": Style(
+                              display: Display.INLINE,
+                              margin: EdgeInsets.all(0),
+                            ),
+                            ".u-emoji": Style(
+                              width: rpx(50),
+                              height: rpx(50),
+                            ),
+                          },
+                        ),
+                      );
+                    }),
+              ),
+            ),
+            _buildInputTextComposer(),
+          ],
+        ),
+      ),
+    );
   }
 }

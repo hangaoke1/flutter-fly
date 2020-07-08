@@ -50,10 +50,12 @@ class _TabListDemoState extends State<TabListDemo>
         controller: _tabController,
         children: [
           ListWrap<Order>(
+            firstRefresh: true,
             onLoad: _load,
             itemBuilder: _buildItem,
           ),
           ListWrap<Order>(
+            firstRefresh: true,
             onLoad: _load,
             itemBuilder: _buildItem,
           ),

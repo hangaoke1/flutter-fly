@@ -8,10 +8,12 @@ import 'package:flutter_fly/components/MyFlexibleSpaceBar.dart';
 import 'package:flutter_fly/components/MySliverPersistentHeaderDelegate.dart';
 import 'package:flutter_fly/utils/theme.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:loading_more_list/loading_more_list.dart';
 
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:pull_to_refresh_notification/pull_to_refresh_notification.dart';
+
+import 'loadmore/loading_more_list.dart';
 
 final List<String> imgList = [
   'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
@@ -69,7 +71,8 @@ class Find extends StatefulWidget {
   _FindState createState() => _FindState();
 }
 
-class _FindState extends State<Find> with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+class _FindState extends State<Find>
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   TabController primaryTC;
   final GlobalKey<NestedScrollViewState> _key =
       GlobalKey<NestedScrollViewState>();
@@ -277,6 +280,79 @@ class _TabViewItemState extends State<TabViewItem>
     super.dispose();
   }
 
+  bool success = false;
+  Future<bool> onRefresh() {
+    final Completer<bool> completer = new Completer<bool>();
+    new Timer(const Duration(seconds: 2), () {
+      completer.complete(success);
+      success = true;
+    });
+    return completer.future.then((bool success) {
+      if (success) {
+        setState(() {});
+      }
+      return success;
+    });
+  }
+
+  Widget buildPulltoRefreshHeader(PullToRefreshScrollNotificationInfo info) {
+    var offset = info?.dragOffset ?? 0.0;
+    var mode = info?.mode;
+    Widget refreshWiget = Container();
+    //it should more than 18, so that RefreshProgressIndicator can be shown fully
+    if (info?.refreshWiget != null &&
+        offset > 18.0 &&
+        mode != RefreshIndicatorMode.error) {
+      refreshWiget = info.refreshWiget;
+    }
+
+    Widget child;
+    if (mode == RefreshIndicatorMode.error) {
+      child = GestureDetector(
+          onTap: () {
+            info?.pullToRefreshNotificationState?.show();
+          },
+          child: Container(
+            color: Colors.grey,
+            alignment: Alignment.bottomCenter,
+            height: offset,
+            width: double.infinity,
+            child: Container(
+              padding: EdgeInsets.only(left: 5.0),
+              alignment: Alignment.center,
+              child: Text(
+                // ignore: null_aware_before_operator
+                mode?.toString() + "  click to retry" ?? "",
+                style: TextStyle(fontSize: 12.0, inherit: false),
+              ),
+            ),
+          ));
+    } else {
+      child = Container(
+        color: Colors.grey,
+        alignment: Alignment.bottomCenter,
+        height: offset,
+        width: double.infinity,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            refreshWiget,
+            Container(
+              padding: EdgeInsets.only(left: 5.0),
+              alignment: Alignment.center,
+              child: Text(
+                mode?.toString() ?? "",
+                style: TextStyle(fontSize: 12.0, inherit: false),
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
+    return child;
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -288,7 +364,22 @@ class _TabViewItemState extends State<TabViewItem>
       ),
     );
 
-    return NestedScrollViewInnerScrollPositionKeyWidget(widget.tabKey, child);
+    return NestedScrollViewInnerScrollPositionKeyWidget(
+      widget.tabKey,
+      PullToRefreshNotification(
+        color: Colors.blue,
+        onRefresh: onRefresh,
+        maxDragOffset: 100,
+        child: GlowNotificationWidget(Column(
+          children: <Widget>[
+            PullToRefreshContainer(buildPulltoRefreshHeader),
+            Expanded(
+              child: child,
+            )
+          ],
+        )),
+      ),
+    );
   }
 
   @override

@@ -3,6 +3,8 @@ import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/ball_pulse_header.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/style.dart';
 
 import 'package:provider/provider.dart';
 import 'package:flutter_fly/provider/user.dart';
@@ -273,8 +275,32 @@ class _UserState extends State<User> with WidgetsBindingObserver {
                       size: 20.0,
                     ),
                   ),
-                ),
+                )
               ],
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: UnconstrainedBox(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 250.0, minWidth: 0),
+                child: Container(
+                  color: Colors.red,
+                  child: Html(
+                    data: """我是文字""",
+                    shrinkWrap: true,
+                    style: {
+                      "html": Style(
+                        display: Display.INLINE,
+                        margin: EdgeInsets.all(0),
+                      ),
+                      "body": Style(
+                        display: Display.INLINE,
+                        margin: EdgeInsets.all(0),
+                      ),
+                    },
+                  ),
+                ),
+              ),
             ),
           )
         ],
