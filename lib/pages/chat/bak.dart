@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_fly/pages/chat/chat_message.dart';
 
-/// customer + centerKey解决方案
+/// customerScrollView + centerKey解决方案
 /// 存在问题：
 /// 1. 首次进入页面时候无法立即滚动到底部，当前解决方案，通过hack首发，在首次滚动的时候增加
 /// 一个弹窗
@@ -14,7 +14,7 @@ import 'package:flutter_fly/pages/chat/chat_message.dart';
 /// 解决问题：
 /// 1. 历史消息查看不会闪屏
 /// 2. 新消息添加不会影响历史消息查看
-/// 3. 首条消息不会显示在底部
+/// 3. 消息不满一屏不会显示在底部
 
 class Chat extends StatefulWidget {
   @override

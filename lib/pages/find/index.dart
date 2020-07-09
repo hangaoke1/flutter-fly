@@ -3,17 +3,15 @@ import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart'
     hide NestedScrollView, NestedScrollViewState;
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_fly/components/MyFlexibleSpaceBar.dart';
 import 'package:flutter_fly/components/MySliverPersistentHeaderDelegate.dart';
+import 'package:flutter_fly/components/list/index.dart';
+import 'package:flutter_fly/components/listItemNormal/index.dart';
+import 'package:flutter_fly/models/order.dart';
 import 'package:flutter_fly/utils/theme.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:pull_to_refresh_notification/pull_to_refresh_notification.dart';
-
-import 'loadmore/loading_more_list.dart';
+import 'package:flutter_fly/api/order.dart' as orderApi;
 
 final List<String> imgList = [
   'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
@@ -214,21 +212,6 @@ class _FindState extends State<Find>
   bool get wantKeepAlive => true;
 }
 
-class LoadMoreListSource extends LoadingMoreBase<int> {
-  @override
-  Future<bool> loadData([bool isloadMoreAction = false]) {
-    if (!isloadMoreAction) {
-      HapticFeedback.mediumImpact();
-    }
-    return Future<bool>.delayed(const Duration(seconds: 1), () {
-      for (int i = 0; i < 10; i++) {
-        add(0);
-      }
-      return true;
-    });
-  }
-}
-
 class TabViewItem extends StatefulWidget {
   const TabViewItem(this.tabKey);
   final Key tabKey;
@@ -238,146 +221,36 @@ class TabViewItem extends StatefulWidget {
 
 class _TabViewItemState extends State<TabViewItem>
     with AutomaticKeepAliveClientMixin {
-  LoadMoreListSource source;
   @override
   void initState() {
-    source = LoadMoreListSource();
     super.initState();
-  }
-
-  Widget _buildIndicator(BuildContext context, IndicatorStatus status) {
-    Widget widget;
-    switch (status) {
-      case IndicatorStatus.fullScreenBusying:
-        widget = SpinKitFadingCube(
-          color: Theme.of(context).primaryColor,
-          size: 40.0,
-        );
-        break;
-      case IndicatorStatus.loadingMoreBusying:
-        widget = SpinKitThreeBounce(
-          color: Theme.of(context).primaryColor,
-          size: 40.0,
-        );
-        break;
-      default:
-    }
-    return widget;
-  }
-
-  // 生成列表项
-  Widget _buildItem(BuildContext c, int item, int index) {
-    return Container(
-      alignment: Alignment.center,
-      height: 60.0,
-      child: Text(widget.tabKey.toString() + ': ListView$index'),
-    );
   }
 
   @override
   void dispose() {
-    source.dispose();
     super.dispose();
   }
 
-  bool success = false;
-  Future<bool> onRefresh() {
-    final Completer<bool> completer = new Completer<bool>();
-    new Timer(const Duration(seconds: 2), () {
-      completer.complete(success);
-      success = true;
-    });
-    return completer.future.then((bool success) {
-      if (success) {
-        setState(() {});
-      }
-      return success;
-    });
+  Future<dynamic> _load(int pageNo, int pageSize) async {
+    List<Order> orderList =
+        await orderApi.queryOrderList({"pageNo": pageNo, "pageSize": pageSize});
+    return orderList;
   }
 
-  Widget buildPulltoRefreshHeader(PullToRefreshScrollNotificationInfo info) {
-    var offset = info?.dragOffset ?? 0.0;
-    var mode = info?.mode;
-    Widget refreshWiget = Container();
-    //it should more than 18, so that RefreshProgressIndicator can be shown fully
-    if (info?.refreshWiget != null &&
-        offset > 18.0 &&
-        mode != RefreshIndicatorMode.error) {
-      refreshWiget = info.refreshWiget;
-    }
-
-    Widget child;
-    if (mode == RefreshIndicatorMode.error) {
-      child = GestureDetector(
-          onTap: () {
-            info?.pullToRefreshNotificationState?.show();
-          },
-          child: Container(
-            color: Colors.grey,
-            alignment: Alignment.bottomCenter,
-            height: offset,
-            width: double.infinity,
-            child: Container(
-              padding: EdgeInsets.only(left: 5.0),
-              alignment: Alignment.center,
-              child: Text(
-                // ignore: null_aware_before_operator
-                mode?.toString() + "  click to retry" ?? "",
-                style: TextStyle(fontSize: 12.0, inherit: false),
-              ),
-            ),
-          ));
-    } else {
-      child = Container(
-        color: Colors.grey,
-        alignment: Alignment.bottomCenter,
-        height: offset,
-        width: double.infinity,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            refreshWiget,
-            Container(
-              padding: EdgeInsets.only(left: 5.0),
-              alignment: Alignment.center,
-              child: Text(
-                mode?.toString() ?? "",
-                style: TextStyle(fontSize: 12.0, inherit: false),
-              ),
-            )
-          ],
-        ),
-      );
-    }
-
-    return child;
+  Widget _buildItem(item, index, list, listIns) {
+    return ListItemNormal(item: item, index: index, listIns: listIns);
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final LoadingMoreList<int> child = LoadingMoreList<int>(
-      ListConfig<int>(
-        indicatorBuilder: _buildIndicator,
-        itemBuilder: _buildItem,
-        sourceList: source,
-      ),
-    );
 
     return NestedScrollViewInnerScrollPositionKeyWidget(
       widget.tabKey,
-      PullToRefreshNotification(
-        color: Colors.blue,
-        onRefresh: onRefresh,
-        maxDragOffset: 100,
-        child: GlowNotificationWidget(Column(
-          children: <Widget>[
-            PullToRefreshContainer(buildPulltoRefreshHeader),
-            Expanded(
-              child: child,
-            )
-          ],
-        )),
+      ListWrap<Order>(
+        firstRefresh: true,
+        onLoad: _load,
+        itemBuilder: _buildItem,
       ),
     );
   }
