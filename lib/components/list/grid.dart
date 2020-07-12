@@ -2,15 +2,17 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_fly/components/list/refreshUtil.dart';
+import 'package:flutter_fly/utils/fly.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 typedef LoadCallback = Future<dynamic> Function(int pageNo, int pageSize);
 
 typedef ItemBuilder<T> = Widget Function(
-    T item, int index, List<T> list, ListWrapState listIns);
+    T item, int index, List<T> list, GridListState listIns);
 
-class ListWrap<Item> extends StatefulWidget {
-  ListWrap({
+class GridList<Item> extends StatefulWidget {
+  GridList({
     Key key,
     this.onLoad,
     this.itemBuilder,
@@ -32,10 +34,10 @@ class ListWrap<Item> extends StatefulWidget {
 
   final bool shrinkWrap;
 
-  ListWrapState createState() => ListWrapState<Item>();
+  GridListState createState() => GridListState<Item>();
 }
 
-class ListWrapState<Item> extends State<ListWrap>
+class GridListState<Item> extends State<GridList>
     with AutomaticKeepAliveClientMixin {
   List<Item> list = [];
   EasyRefreshController _controller;
@@ -52,8 +54,6 @@ class ListWrapState<Item> extends State<ListWrap>
     list = [];
     _controller = EasyRefreshController();
 
-    /// 1. 未开启刷新
-    /// 2. 首次刷新，不实用easyRefresh，因为在nestScrollView中存在跳动bug
     if (!widget.refresh || widget.firstRefresh) {
       _handleRefresh();
     }
@@ -127,15 +127,17 @@ class ListWrapState<Item> extends State<ListWrap>
         onRefresh: widget.refresh ? _handleRefresh : null,
         onLoad: _handleLoad,
         slivers: <Widget>[
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final Item item = list[index];
-                return widget.itemBuilder(item, index, list, this);
-              },
-              childCount: list.length,
-            ),
-          ),
+          SliverStaggeredGrid.countBuilder(
+            crossAxisCount: 4,
+            itemCount: list.length,
+            itemBuilder: (context, index) {
+              final Item item = list[index];
+              return widget.itemBuilder(item, index, list, this);
+            },
+            staggeredTileBuilder: (index) => new StaggeredTile.fit(2),
+            mainAxisSpacing: rpx(16.0),
+            crossAxisSpacing: rpx(16.0),
+          )
         ],
       );
     }

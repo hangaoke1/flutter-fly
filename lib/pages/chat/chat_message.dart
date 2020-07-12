@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class ChatMessage extends StatefulWidget {
   ChatMessage({Key key, this.isSelf, this.child}) : super(key: key);
   bool isSelf;
@@ -58,10 +60,12 @@ class _ChatMessageState extends State<ChatMessage> {
               ),
             ),
             ClipRRect(
-              borderRadius: BorderRadius.circular(100.0),
-              child: Image.network(
-                "https://pcdn.flutterchina.club/imgs/3-17.png",
-                width: rpx(100),
+              borderRadius: BorderRadius.circular(90.0),
+              child: CachedNetworkImage(
+                imageUrl:
+                    "http://wwc.alicdn.com/avatar/getAvatar.do?userNick=&width=150&height=150&type=sns&_input_charset=UTF-8",
+                width: rpx(90),
+                height: rpx(90),
               ),
             ),
           ],
@@ -75,10 +79,12 @@ class _ChatMessageState extends State<ChatMessage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             ClipRRect(
-              borderRadius: BorderRadius.circular(100.0),
-              child: Image.network(
-                "https://pcdn.flutterchina.club/imgs/3-17.png",
-                width: rpx(100),
+              borderRadius: BorderRadius.circular(90.0),
+              child: CachedNetworkImage(
+                imageUrl:
+                    "http://wwc.alicdn.com/avatar/getAvatar.do?userNick=&width=150&height=150&type=sns&_input_charset=UTF-8",
+                width: rpx(90),
+                height: rpx(90),
               ),
             ),
             Container(

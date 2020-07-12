@@ -1,10 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/ball_pulse_header.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
+import 'package:flutter_fly/components/g_icon/index.dart';
+import 'package:flutter_fly/components/list/refreshUtil.dart';
 
 import 'package:provider/provider.dart';
 import 'package:flutter_fly/provider/user.dart';
@@ -64,7 +64,7 @@ class _UserState extends State<User> with WidgetsBindingObserver {
     return Container(
       decoration: BoxDecoration(color: scaffoldBackgroundColor),
       child: EasyRefresh.custom(
-        header: BallPulseHeader(color: primaryColor),
+        header: RefreshUtil.getHeader(context),
         controller: _controller,
         onRefresh: () async {
           await Future.delayed(Duration(milliseconds: 1000));
@@ -96,10 +96,13 @@ class _UserState extends State<User> with WidgetsBindingObserver {
                             children: <Widget>[
                               ClipRRect(
                                 //剪裁为圆角矩形
-                                borderRadius: BorderRadius.circular(5.0),
-                                child: Image.network(
-                                  "https://pcdn.flutterchina.club/imgs/3-17.png",
-                                  width: rpx(150),
+                                borderRadius: BorderRadius.circular(130),
+                                child: CachedNetworkImage(
+                                  imageUrl:
+                                      context.watch<UserProvider>().user.avatar,
+                                  width: rpx(130),
+                                  height: rpx(130),
+                                  fit: BoxFit.fill,
                                 ),
                               ),
                               Expanded(
@@ -113,12 +116,14 @@ class _UserState extends State<User> with WidgetsBindingObserver {
                                     children: <Widget>[
                                       Text(
                                         '${context.watch<UserProvider>().user.username}',
-                                        style: textStyle.copyWith(fontSize: 24),
+                                        style: textStyle.copyWith(
+                                          fontSize: rpx(36),
+                                        ),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                       Text(
-                                        '暂无简介',
+                                        '${context.watch<UserProvider>().user.introduce}',
                                         style: subTextStyle,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
@@ -130,10 +135,7 @@ class _UserState extends State<User> with WidgetsBindingObserver {
                             ],
                           ),
                         ),
-                        Icon(
-                          IconData(0xe65b, fontFamily: 'Iconfont'),
-                          size: 35.0,
-                        ),
+                        GIcon(type: 0xe65b, size: 35)
                       ],
                     ),
                   ),
@@ -252,7 +254,7 @@ class _UserState extends State<User> with WidgetsBindingObserver {
                     ),
                     title: Text('注册日期'),
                     trailing: Text(
-                      '${DateUtil.formatDate(nowDate, format: DateFormats.full)}',
+                      '${DateUtil.formatDateStr(context.watch<UserProvider>().user.createTime, format: DateFormats.full)}',
                       style: textStyle,
                     ),
                   ),
@@ -279,30 +281,6 @@ class _UserState extends State<User> with WidgetsBindingObserver {
               ],
             ),
           ),
-          SliverToBoxAdapter(
-            child: UnconstrainedBox(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: 250.0, minWidth: 0),
-                child: Container(
-                  color: Colors.red,
-                  child: Html(
-                    data: """我是文字""",
-                    shrinkWrap: true,
-                    style: {
-                      "html": Style(
-                        display: Display.INLINE,
-                        margin: EdgeInsets.all(0),
-                      ),
-                      "body": Style(
-                        display: Display.INLINE,
-                        margin: EdgeInsets.all(0),
-                      ),
-                    },
-                  ),
-                ),
-              ),
-            ),
-          )
         ],
       ),
     );

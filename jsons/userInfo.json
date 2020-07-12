@@ -1,9 +1,13 @@
 {
-  "userId": "U_10000",
+  "id": "U_10000",
   "username": "李磊",
+  "introduce": "我是一直鲨鱼",
+  "sex": 1,
+  "avatar": "http://wwc.alicdn.com/avatar/getAvatar.do?userNick=&width=150&height=150&type=sns&_input_charset=UTF-8",
   "phone": "15557007893",
   "userLevel": 1,
   "balance": 29329389,
   "userStatus": 1,
-  "hasNameAuth": false
+  "hasNameAuth": false,
+  "createTime": "2020-02-02 12:00:00"
 }

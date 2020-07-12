@@ -16,7 +16,6 @@ class DemoHeader extends SliverPersistentHeaderDelegate {
             fit: BoxFit.cover,
           ),
         ),
-        // color: color,
         alignment: Alignment.center,
         child: Text(this.text,
             style: TextStyle(color: Colors.white, fontSize: 30.0)));
