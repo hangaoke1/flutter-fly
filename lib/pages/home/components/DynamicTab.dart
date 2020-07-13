@@ -36,10 +36,12 @@ class _DynamicTabState extends State<DynamicTab>
   Widget build(BuildContext context) {
     super.build(context);
 
-    return ListWrap<Order>(
-      firstRefresh: true,
-      onLoad: _load,
-      itemBuilder: _buildItem,
+    return Scrollbar(
+      child: ListWrap<Order>(
+        firstRefresh: true,
+        onLoad: _load,
+        itemBuilder: _buildItem,
+      ),
     );
   }
 

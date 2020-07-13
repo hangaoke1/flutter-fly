@@ -8,6 +8,19 @@
 flutter packages pub run json_model
 ```
 
+## 项目演示
+|  用户动态   |  商品瀑布流  |
+|  ----  | ----  |
+| ![](https://hgkcdn.oss-cn-shanghai.aliyuncs.com/flutter/fly-5.jpeg)  | ![](https://hgkcdn.oss-cn-shanghai.aliyuncs.com/flutter/fly-4.jpeg)  |
+
+|  聊天页面   | 图片预览  |
+|  ----  | ----  |
+| ![](https://hgkcdn.oss-cn-shanghai.aliyuncs.com/flutter/fly-3.png)  | ![](https://hgkcdn.oss-cn-shanghai.aliyuncs.com/flutter/fly-6.png) |
+
+|  暗黑模式   | 暗黑模式  |
+|  ----  | ----  |
+| ![](https://hgkcdn.oss-cn-shanghai.aliyuncs.com/flutter/fly-2.jpeg)   | ![](https://hgkcdn.oss-cn-shanghai.aliyuncs.com/flutter/fly-1.jpeg)  |
+
 ## 快速开始
 
 This project is a starting point for a Flutter application.
