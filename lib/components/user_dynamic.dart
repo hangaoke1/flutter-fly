@@ -2,17 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fly/components/g_photo_view/index.dart';
 import 'package:flutter_fly/utils/fly.dart';
-import 'package:flutter_fly/utils/theme.dart';
 import 'package:route_transitions/route_transitions.dart';
 
 import 'g_icon/index.dart';
 
 // 用户动态
-// ignore: must_be_immutable
 class UserDynamic extends StatefulWidget {
   UserDynamic({Key key, this.id}) : super(key: key);
 
-  int id;
+  final int id;
   @override
   _UserDynamicState createState() => _UserDynamicState();
 }
@@ -27,7 +25,7 @@ class _UserDynamicState extends State<UserDynamic> {
   void renderImage(index, images) {
     Navigator.of(context).push(PageRouteTransition(
       animationType: AnimationType.scale,
-      builder: (context) => PhotoViewGalleryScreen(
+      builder: (context) => GPhotoView(
         images: images,
         index: index,
       ),

@@ -4,7 +4,7 @@ import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_fly/components/g_icon/index.dart';
-import 'package:flutter_fly/components/list/refreshUtil.dart';
+import 'package:flutter_fly/components/list/refresh_util.dart';
 
 import 'package:provider/provider.dart';
 import 'package:flutter_fly/provider/user.dart';

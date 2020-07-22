@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'dart:ui' as ui;
-import 'package:animate_do/animate_do.dart';
 import 'package:extended_list/extended_list.dart';
-import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
+import 'package:flutter_fly/pages/chat/chat_enum.dart';
+import 'package:flutter_fly/pages/chat/chat_input.dart';
+import 'package:flutter_fly/utils/fly.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_fly/pages/chat/chat_message.dart';
 
@@ -15,23 +13,14 @@ class Chat extends StatefulWidget {
   _ChatState createState() => _ChatState();
 }
 
-class _ChatState extends State<Chat> with WidgetsBindingObserver {
+class _ChatState extends State<Chat> {
   List<String> chatList = [];
   bool _loading = false;
-  FocusNode _focusNode = FocusNode(); // 初始化一个FocusNode控件
-
-  TextEditingController mEditController = TextEditingController();
-  ScrollController _scroller = ScrollController();
-
-  bool showEmoji = false;
-  bool mBottomLayoutShow = false;
-  double _keyboardHeight = 200;
-
   bool get hasMore => chatList.length < 100;
+  ScrollController _scroller = ScrollController();
+  GlobalKey<ChatInputState> _chatInputRef = GlobalKey();
 
   void initState() {
-    WidgetsBinding.instance.addObserver(this);
-
     // 滚动处理
     _scroller.addListener(() {
       if (!_scroller.hasClients) {
@@ -51,28 +40,6 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
     });
     _initChatList();
     super.initState();
-  }
-
-  @override
-  void didChangeMetrics() {
-    final mediaQueryData = MediaQueryData.fromWindow(ui.window);
-    final keyHeight = mediaQueryData?.viewInsets?.bottom;
-    if (keyHeight != 0) {
-      if (mounted) {
-        setState(() {
-          mBottomLayoutShow = true;
-          _keyboardHeight = keyHeight;
-          showEmoji = false;
-        });
-        _scrollToBottom();
-      }
-    } else {
-      if (mounted) {
-        setState(() {
-          mBottomLayoutShow = false;
-        });
-      }
-    }
   }
 
   @override
@@ -145,85 +112,32 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
   }
 
   _handleSendMessage(String text) {
-    mEditController.clear();
     addItems2(text);
-    FocusScope.of(context).requestFocus(_focusNode);
   }
 
-  // 生成底部输入框
-  Widget _buildInputTextComposer() {
-    Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
+  // 加载历史消息loading组件
+  Widget _genIndicator() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(2, 10, 2, 10),
-      child: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                child: Icon(Icons.settings_voice),
-              ),
-              Expanded(
-                child: TextField(
-                  textInputAction: TextInputAction.send,
-                  focusNode: _focusNode,
-                  controller: mEditController,
-                  onSubmitted: _handleSendMessage,
-                  style: TextStyle(fontSize: 16),
-                  decoration: InputDecoration(
-                    hintStyle: TextStyle(fontSize: 16),
-                    hintText: "请输入内容...",
-                    contentPadding: EdgeInsets.all(5.0),
-                    fillColor: Colors.white,
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(4),
-                      ),
-                    ),
-                  ),
+      padding: EdgeInsets.all(rpx(40)),
+      child: _loading
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SpinKitFadingCircle(
+                  color: Colors.black,
+                  size: 20.0,
                 ),
-              ),
-              GestureDetector(
-                onTap: () => {
-                  setState(() {
-                    _focusNode.unfocus();
-                    mBottomLayoutShow = false;
-                    showEmoji = true;
-                    _scrollToBottom();
-                  })
-                },
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                  child: Icon(Icons.insert_emoticon),
+                Container(
+                  margin: EdgeInsets.only(left: rpx(10)),
+                  child: Text('加载中'),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                child: Icon(Icons.add),
-              ),
-            ],
-          ),
-          Container(
-            height: mBottomLayoutShow ? _keyboardHeight : 0,
-            child: Text(''),
-          ),
-          showEmoji
-              ? Container(
-                  color: scaffoldBackgroundColor,
-                  width: rpx(750),
-                  height: rpx(400),
-                  child: Text('emoji表情'),
-                )
-              : Container()
-        ],
-      ),
+              ],
+            )
+          : Center(
+              child: Text(hasMore ? '下拉加载更多消息' : '没有更多啦~'),
+            ),
     );
-  }
-
-  rpx(double value) {
-    return ScreenUtil.getInstance().getWidth(value);
   }
 
   @override
@@ -241,12 +155,10 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
             Expanded(
               child: GestureDetector(
                 onTapUp: (TapUpDetails fd) {
-                  if (_focusNode.hasFocus) {
-                    FocusScope.of(context).requestFocus(FocusNode());
-                  }
-                  setState(() {
-                    showEmoji = false;
-                  });
+                  // 失去焦点
+                  _chatInputRef.currentState.doBlur();
+                  // 重置底部显示菜单
+                  _chatInputRef.currentState.setShowType(ShowType.none);
                 },
                 child: ExtendedListView.builder(
                     physics: BouncingScrollPhysics(
@@ -260,53 +172,20 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
                     itemCount: chatList.length + 1,
                     itemBuilder: (BuildContext context, int index) {
                       if (index == chatList.length) {
-                        return Container(
-                          padding: EdgeInsets.all(rpx(40)),
-                          child: _loading
-                              ? Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    SpinKitFadingCircle(
-                                      color: Colors.black,
-                                      size: 20.0,
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.only(left: rpx(10)),
-                                      child: Text('加载中'),
-                                    ),
-                                  ],
-                                )
-                              : Center(
-                                  child: Text(hasMore ? '下拉加载更多消息' : '没有更多啦~'),
-                                ),
-                        );
+                        return _genIndicator();
                       }
                       return ChatMessage(
                         isSelf: true,
-                        child: Html(
-                          data: """<span>${chatList[index]}</span>""",
-                          shrinkWrap: true,
-                          style: {
-                            "html": Style(
-                              display: Display.INLINE,
-                              margin: EdgeInsets.all(0),
-                            ),
-                            "body": Style(
-                              display: Display.INLINE,
-                              margin: EdgeInsets.all(0),
-                            ),
-                            ".u-emoji": Style(
-                              width: rpx(50),
-                              height: rpx(50),
-                            ),
-                          },
-                        ),
+                        child: Text('我是服务器拉取的消息${chatList[index]}'),
                       );
                     }),
               ),
             ),
-            _buildInputTextComposer(),
+            ChatInput(
+              key: _chatInputRef,
+              scrollToBottom: _scrollToBottom,
+              sendText: _handleSendMessage,
+            ),
           ],
         ),
       ),

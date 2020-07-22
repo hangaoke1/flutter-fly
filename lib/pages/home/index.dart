@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fly/pages/home/comic/index.dart';
 import 'package:flutter_fly/utils/fly.dart';
 import 'package:flutter_fly/utils/theme.dart';
-import 'components/ProductTab.dart';
-import 'components/DynamicTab.dart';
+import 'components/product_tab.dart';
+import 'components/dynamic_tab.dart';
 
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);

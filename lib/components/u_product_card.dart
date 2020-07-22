@@ -8,11 +8,10 @@ const mockImage = [
   'http://img.alicdn.com/bao/uploaded/i1/132110009/TB2hKq3jVXXXXblXpXXXXXXXXXX_!!132110009.jpg_350x350q90.jpg'
 ];
 
-// ignore: must_be_immutable
 class UProductCard extends StatefulWidget {
   UProductCard({Key key, this.index}) : super(key: key);
 
-  int index;
+  final int index;
   @override
   _UProductCardState createState() => _UProductCardState();
 }

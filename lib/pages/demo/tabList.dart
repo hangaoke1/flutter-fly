@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fly/components/list/index.dart';
-import 'package:flutter_fly/components/listItemNormal/index.dart';
+import 'package:flutter_fly/components/list_item_normal/index.dart';
 import 'package:flutter_fly/models/order.dart';
 import 'package:flutter_fly/api/order.dart' as orderApi;
 
@@ -49,12 +49,12 @@ class _TabListDemoState extends State<TabListDemo>
       body: TabBarView(
         controller: _tabController,
         children: [
-          ListWrap<Order>(
+          GList<Order>(
             firstRefresh: true,
             onLoad: _load,
             itemBuilder: _buildItem,
           ),
-          ListWrap<Order>(
+          GList<Order>(
             firstRefresh: true,
             onLoad: _load,
             itemBuilder: _buildItem,

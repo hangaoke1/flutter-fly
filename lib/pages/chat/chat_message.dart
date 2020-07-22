@@ -2,11 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
 class ChatMessage extends StatefulWidget {
   ChatMessage({Key key, this.isSelf, this.child}) : super(key: key);
-  bool isSelf;
-  Widget child;
+  final bool isSelf;
+  final Widget child;
   @override
   _ChatMessageState createState() => _ChatMessageState();
 }

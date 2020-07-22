@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_fly/components/list/refreshUtil.dart';
+import 'package:flutter_fly/components/list/refresh_util.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 typedef LoadCallback = Future<dynamic> Function(int pageNo, int pageSize);
 
 typedef ItemBuilder<T> = Widget Function(
-    T item, int index, List<T> list, ListWrapState listIns);
+    T item, int index, List<T> list, GListState listIns);
 
-class ListWrap<Item> extends StatefulWidget {
-  ListWrap({
+class GList<Item> extends StatefulWidget {
+  GList({
     Key key,
     this.onLoad,
     this.itemBuilder,
@@ -32,11 +32,10 @@ class ListWrap<Item> extends StatefulWidget {
 
   final bool shrinkWrap;
 
-  ListWrapState createState() => ListWrapState<Item>();
+  GListState createState() => GListState<Item>();
 }
 
-class ListWrapState<Item> extends State<ListWrap>
-    with AutomaticKeepAliveClientMixin {
+class GListState<Item> extends State<GList> with AutomaticKeepAliveClientMixin {
   List<Item> list = [];
   EasyRefreshController _controller;
   int pageNo = 1;

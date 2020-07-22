@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
 import 'package:flutter_fly/components/list/index.dart';
-import 'package:flutter_fly/components/listItem/index.dart';
+import 'package:flutter_fly/components/list_item/index.dart';
 import 'package:flutter_fly/models/order.dart';
 import 'package:flutter_fly/api/order.dart' as orderApi;
 
@@ -109,7 +109,7 @@ class TabList2DemoState extends State<TabList2Demo>
           children: <Widget>[
             extended.NestedScrollViewInnerScrollPositionKeyWidget(
               Key('Tab0'),
-              ListWrap<Order>(
+              GList<Order>(
                 firstRefresh: true,
                 onLoad: _load,
                 itemBuilder: _buildItem,
@@ -117,7 +117,7 @@ class TabList2DemoState extends State<TabList2Demo>
             ),
             extended.NestedScrollViewInnerScrollPositionKeyWidget(
               Key('Tab1'),
-              ListWrap<Order>(
+              GList<Order>(
                 firstRefresh: true,
                 onLoad: _load,
                 itemBuilder: _buildItem,

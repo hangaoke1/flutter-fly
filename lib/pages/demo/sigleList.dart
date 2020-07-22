@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_fly/components/list/index.dart';
-import 'package:flutter_fly/components/listItem/index.dart';
+import 'package:flutter_fly/components/list_item/index.dart';
 
 import 'package:flutter_fly/api/order.dart' as orderApi;
 import 'package:flutter_fly/models/index.dart';
@@ -33,7 +33,7 @@ class _SingleListDemoState extends State<SingleListDemo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('列表加载'), elevation: 0.5),
-      body: ListWrap<Order>(
+      body: GList<Order>(
         firstRefresh: true,
         onLoad: _load,
         itemBuilder: _buildItem,

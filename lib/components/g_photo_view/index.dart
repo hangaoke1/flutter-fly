@@ -4,16 +4,16 @@ import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
 // ignore: must_be_immutable
-class PhotoViewGalleryScreen extends StatefulWidget {
-  List images = [];
-  int index = 0;
-  String heroTag;
+class GPhotoView extends StatefulWidget {
+  final List images;
+  final int index;
+  final String heroTag;
   PageController controller;
 
-  PhotoViewGalleryScreen({
+  GPhotoView({
     Key key,
     @required this.images,
-    this.index,
+    this.index = 0,
     this.controller,
     this.heroTag,
   }) : super(key: key) {
@@ -21,10 +21,10 @@ class PhotoViewGalleryScreen extends StatefulWidget {
   }
 
   @override
-  _PhotoViewGalleryScreenState createState() => _PhotoViewGalleryScreenState();
+  _GPhotoViewState createState() => _GPhotoViewState();
 }
 
-class _PhotoViewGalleryScreenState extends State<PhotoViewGalleryScreen> {
+class _GPhotoViewState extends State<GPhotoView> {
   int currentIndex = 0;
 
   @override

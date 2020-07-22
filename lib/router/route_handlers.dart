@@ -12,9 +12,9 @@ import 'package:flutter_fly/pages/demo/sigleList.dart';
 import 'package:flutter_fly/pages/demo/tabList.dart';
 import 'package:flutter_fly/pages/demo/tabList2.dart';
 import 'package:flutter_fly/pages/demo/tabList3.dart';
-import 'package:flutter_fly/pages/notFound/index.dart';
+import 'package:flutter_fly/pages/not_found/index.dart';
 import 'package:flutter_fly/pages/root/index.dart';
-import 'package:flutter_fly/pages/movieDetail/index.dart';
+import 'package:flutter_fly/pages/movie_detail/index.dart';
 
 Widget checkLogin(Widget page) {
   String token = SpUtil.getString(Constant.accessToken);

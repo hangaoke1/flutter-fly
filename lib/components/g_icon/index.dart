@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
 class GIcon extends StatelessWidget {
   GIcon({
     Key key,
@@ -9,9 +8,9 @@ class GIcon extends StatelessWidget {
     this.color,
   }) : super(key: key);
 
-  int type;
-  double size;
-  Color color;
+  final int type;
+  final double size;
+  final Color color;
   @override
   Widget build(BuildContext context) {
     return Icon(

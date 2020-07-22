@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fly/api/order.dart' as orderApi;
-import 'package:flutter_fly/components/UserDynamic.dart';
+import 'package:flutter_fly/components/user_dynamic.dart';
 import 'package:flutter_fly/components/list/index.dart';
 import 'package:flutter_fly/models/order.dart';
 
@@ -37,7 +37,7 @@ class _DynamicTabState extends State<DynamicTab>
     super.build(context);
 
     return Scrollbar(
-      child: ListWrap<Order>(
+      child: GList<Order>(
         firstRefresh: true,
         onLoad: _load,
         itemBuilder: _buildItem,
